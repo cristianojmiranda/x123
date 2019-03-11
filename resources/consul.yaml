@@ -1,0 +1,47 @@
+# === CONSUL ==========================================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: default
+  name: consul
+  labels:
+    app: consul
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: consul
+  template:
+    metadata:
+      labels:
+        app: consul
+    spec:
+      containers:
+      - name: consul
+        image: consul
+        ports:
+        - containerPort: 8500
+        resources:
+          limits:
+            memory: 256Mi
+            cpu: 0.2
+          requests:
+            memory: 128Mi
+            cpu: 0.1
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: default
+  name: consul
+spec:
+  type: NodePort
+  selector:
+    app: consul
+  ports:
+  - protocol: TCP
+    port: 8500
+    targetPort: 8500
+
+

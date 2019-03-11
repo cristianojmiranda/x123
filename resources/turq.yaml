@@ -1,0 +1,89 @@
+# === TURQ ==========================================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: turq-config
+  namespace: default
+data:
+  turq.py: |
+    if route('/health') and GET:
+      json({'status': 'OK'})
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: default
+  name: turq
+  labels:
+    app: turq
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: turq
+  template:
+    metadata:
+      labels:
+        app: turq
+    spec:
+      containers:
+      - name: turq
+        image: python:3.6.8-alpine
+        imagePullPolicy: Always
+        command: 
+        - "/bin/sh"
+        args: 
+        - "-c" 
+        - "pip install requests redis cassandra-driver pymongo pika python-consul hvac turq && turq -P '' --rules /data/turq.py"
+        ports:
+        - containerPort: 13085
+        - containerPort: 13086
+        resources:
+          limits:
+            memory: 128Mi
+            cpu: 0.1
+          requests:
+            memory: 64Mi
+            cpu: 0.05
+        volumeMounts:
+        - name: config-volume
+          mountPath: /data/turq.py
+          subPath: turq.py
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 13085
+          initialDelaySeconds: 15
+          timeoutSeconds: 3
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 13085
+          initialDelaySeconds: 30
+          timeoutSeconds: 3
+          periodSeconds: 15
+      volumes:
+      - name: config-volume
+        configMap:
+          name: turq-config
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: default
+  name: turq
+spec:
+  type: NodePort
+  selector:
+    app: turq
+  ports:
+  - name: editor
+    port: 13086
+    targetPort: 13086
+  - name: server
+    port: 13085
+    targetPort: 13085
+

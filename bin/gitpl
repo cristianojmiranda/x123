@@ -1,0 +1,4 @@
+#!/bin/bash
+gits
+git pull origin $1
+

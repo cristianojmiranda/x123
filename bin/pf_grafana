@@ -1,0 +1,2 @@
+#!/bin/bash
+kk -n monitoring port-forward svc/grafana 3000

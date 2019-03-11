@@ -1,0 +1,4 @@
+#!/bin/bash
+echo "git reset --hard HEAD^"
+gits
+git reset --hard HEAD^

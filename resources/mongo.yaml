@@ -1,0 +1,46 @@
+# === MONGO ==========================================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: default
+  name: mongo
+  labels:
+    app: mongo
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+      - name: mongo
+        image: mongo
+        ports:
+        - containerPort: 27017
+        resources:
+          limits:
+            memory: 256Mi
+            cpu: 0.2
+          requests:
+            memory: 128Mi
+            cpu: 0.1
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: default
+  name: mongo
+spec:
+  type: NodePort
+  selector:
+    app: mongo
+  ports:
+  - protocol: TCP
+    port: 27017
+    targetPort: 27017
+

@@ -1,0 +1,8 @@
+#!/bin/bash
+gits
+if [[ $# -eq 2 ]] ; then
+	git commit -m "$1 - $2"
+else
+	git commit -m "$1"
+fi
+

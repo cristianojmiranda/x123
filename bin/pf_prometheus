@@ -1,0 +1,2 @@
+#!/bin/bash
+kk -n monitoring port-forward svc/prometheus 9090

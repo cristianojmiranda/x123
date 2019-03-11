@@ -1,0 +1,14 @@
+#!/bin/bash
+
+kk cluster-info
+
+# access token
+kk -n kube-system describe secret $(kk -n kube-system get secret | grep admin-user | awk '{print $1}') | grep 'token:' | awk '{print $2}'
+
+# 
+kk -n kube-system get svc | grep dashboard
+
+echo "Open https://localhost:8443 with HEADER Authorization: Bearer <with the token above>"
+
+#
+kk port-forward svc/kubernetes-dashboard 8443:443 -n kube-system

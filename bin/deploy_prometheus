@@ -1,0 +1,6 @@
+#!/bin/bash
+#git clone https://github.com/kubernetes-incubator/metrics-server.git
+#kubectl apply --filename metrics-server/deploy/1.8+/
+#kubectl delete --filename metrics-server/deploy/1.8+/
+#rm -rf metrics-server
+kubectl apply -f https://raw.githubusercontent.com/giantswarm/kubernetes-prometheus/master/manifests-all.yaml

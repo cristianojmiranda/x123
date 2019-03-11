@@ -1,0 +1,22 @@
+#!/bin/bash
+source env.sh
+
+#echo "=== ==="
+docker-compose --file=$_RESOURCES/docker-compose.yml up -d
+
+while true; do
+	if [[ -f $_WORKDIR/kubeconfig.yaml ]]; then
+		break
+	else
+		echo '.'
+		sleep 5
+	fi
+done
+
+mkdir -p ~/.kube
+cat $_WORKDIR/kubeconfig.yaml  > ~/.kube/config
+kubectl cluster-info
+
+# fix dns
+kubectl apply -f $_RESOURCES/coredns.yaml
+docker-compose --file=$_RESOURCES/docker-compose.yml logs --follow

@@ -1,0 +1,2 @@
+#!/bin/bash
+kk --kubeconfig ~/.kube/config_$1 ${@:2}

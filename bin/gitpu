@@ -1,0 +1,4 @@
+#!/bin/bash
+gits
+git push origin $1
+

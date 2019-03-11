@@ -1,0 +1,2 @@
+#!/bin/bash
+kk port-forward svc/$1 $2

@@ -1,0 +1,2 @@
+#!/bin/bash
+svc_pf vault 8200:8200

@@ -1,0 +1,54 @@
+# === VAULT ==========================================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: default
+  name: vault
+  labels:
+    app: vault
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vault
+  template:
+    metadata:
+      labels:
+        app: vault
+    spec:
+      containers:
+      - name: vault
+        image: vault
+        ports:
+        - containerPort: 8200
+        resources:
+          limits:
+            memory: 256Mi
+            cpu: 0.2
+          requests:
+            memory: 128Mi
+            cpu: 0.1
+        env:
+        - name: VAULT_DEV_ROOT_TOKEN_ID
+          value: v5ulT
+        - name: VAULT_LOCAL_CONFIG
+          value: '{"ui": true, "default_lease_ttl": "168h", "max_lease_ttl": "720h"}'
+        securityContext:
+          capabilities:
+            add:
+            - IPC_LOCK
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: default
+  name: vault
+spec:
+  type: NodePort
+  selector:
+    app: vault
+  ports:
+  - protocol: TCP
+    port: 8200
+    targetPort: 8200

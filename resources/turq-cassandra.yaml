@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: turq-config
+  namespace: default
+data:
+  turq.py: |
+    import json as _json
+    import uuid, requests
+    from datetime import datetime
+    from cassandra.cluster import Cluster
+
+    def get_session():
+      cluster = Cluster(['cassandra'])
+      return cluster.connect('turq')
+
+    def log(message):
+      data = (uuid.uuid1(), "turq", datetime.now(), message)
+      get_session().execute("insert into logs (id, actor, date, message) values (%s, %s, %s, %s);", data)
+
+    def get_logs():
+      rows = get_session().execute("select id, message from logs;")
+      return [{'id': row[0], 'date': row[1], 'message': row[2]} for row in rows]
+
+    def flush_logs():
+      get_session().execute("truncate logs;")
+
+    if route('/health') and GET:
+      json({'status': 'OK'})
+
+    elif route('/echo/:val') and GET:
+      log("echo '%s'" % val)
+      text(val.upper())
+
+    elif route('/hello/:name') and GET:
+      log("hello %s" % name)
+      text('Hello %s! \n [%s]' % (name, requests.get('http://turq:13085/echo/%s' % name).text))
+
+    elif route('/logs') and GET:
+      json(get_logs())
+
+    elif route('/logs') and DELETE:
+      json(flush_logs())
+      text('DONE')
+

@@ -1,0 +1,40 @@
+# === SEED-CASSANDRA ==========================================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cassandra-config
+  namespace: default
+data:
+  db.cql: |
+    CREATE KEYSPACE IF NOT EXISTS turq WITH REPLICATION = { \'class\': \'SimpleStrategy\', \'replication_factor\': 1 };
+    CREATE TABLE IF NOT EXISTS turq.logs ( id UUID PRIMARY KEY, actor text, date timestamp, message text );
+    DESC KEYSPACES;
+    DESC TABLES;
+
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: cassandra-seed
+spec:
+  schedule: "*/2 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: cassandra-seed
+            image: cassandra
+            args:
+            - /bin/sh
+            - -c
+            - cat /data/db.cql | xargs -I % echo "cqlsh cassandra 9042 -e \"%\"" | awk '{system($0)}'
+            #- cat /data/db.cql | xargs -I % echo "cqlsh cassandra 9042 -e \"%\""
+            volumeMounts:
+            - name: config-volume
+              mountPath: /data/
+          restartPolicy: OnFailure
+          volumes:
+          - name: config-volume
+            configMap:
+              name: cassandra-config

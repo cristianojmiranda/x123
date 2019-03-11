@@ -1,0 +1,18 @@
+#!/bin/bash
+if [[ $# -eq 1 ]] ; then
+	read -p "$1 [y/n] " answer
+else
+	read -p "Are you sure? [y/n] " answer
+fi
+
+case "${answer}" in
+	[yY]|[yY][eE][sS])
+        echo
+	    echo "Let's proceed \o/"
+        ;;
+    *)
+        echo
+		echo 'Ok, we stay here ;)'
+		exit -1
+        ;;
+esac

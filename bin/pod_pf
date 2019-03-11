@@ -1,0 +1,6 @@
+#!/bin/bash
+POD=pod_get $1
+kk cluster-info
+echo "$POD"
+
+kk port-forward $POD $2

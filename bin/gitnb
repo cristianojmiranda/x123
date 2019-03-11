@@ -1,0 +1,8 @@
+#!/bin/bash
+echo "git new branch from master"
+gitf
+gitc master
+gitpl master
+
+echo "git checkout -b "
+git checkout -b $1
