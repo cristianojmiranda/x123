@@ -1,9 +1,0 @@
-#!/bin/bash
-
-echo "git add ."
-gits
-git diff
-gits
-
-git add .
-
