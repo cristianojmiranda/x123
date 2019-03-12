@@ -1,4 +1,5 @@
 #!/bin/bash
 echo "git reset --hard HEAD^"
 gits
+source confirm
 git reset --hard HEAD^
