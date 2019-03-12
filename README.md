@@ -10,7 +10,7 @@ curl -sfL https://raw.githubusercontent.com/cristianojmiranda/x123/master/instal
 
 ### k3s
 
- Script tools to handle easly with k3s cluster locally
+ Script tools to work easily with k3s cluster locally
  * **start_k3s** - start a local cluster running inside docker (keep your machine clean from containerds)
  * **stop_k3s** - stop the k3s cluster
  * **remove_k3s** - remove the
