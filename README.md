@@ -23,6 +23,6 @@ curl -sfL https://raw.githubusercontent.com/cristianojmiranda/x123/master/instal
 
 ### git
 
-gitcl - git clone
-gitnb - git checkout -b <branch>
-gita - git add .
+ * **gitcl** - git clone
+ * **gitnb** - git checkout -b <branch>
+ * **gita** - git add .
