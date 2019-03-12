@@ -66,6 +66,7 @@ echo "Fetching Consul..."
 fi
 
 # install python3.7
+# TODO:
 
 # intall telepresence
 if ! type "telepresence" > /dev/null; then
