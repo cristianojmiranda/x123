@@ -11,4 +11,5 @@ else
 	docker save $1 -o /tmp/images/$1.tar
 	echo
 	echo "Don't forget to use imagePullPolicy 'IfNotPresent' at your deployment"
+	bounce_k3s_nodes
 fi

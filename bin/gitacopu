@@ -7,7 +7,7 @@ fi
 
 gits
 source confirm "Add all?"
-gita
+gitja
 
 source confirm "Commit?"
 gitco $1

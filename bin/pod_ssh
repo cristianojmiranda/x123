@@ -1,5 +1,5 @@
 #!/bin/bash
-POD=pod_get $1
+POD=$(pod_get $1)
 kk cluster-info
 echo "$POD"
 

@@ -1,0 +1,14 @@
+#!/bin/bash
+echo "Bounce the all k3s nodes"
+docker ps | grep k3s | grep node | awk '{print $1}' > /tmp/.bounce
+cat /tmp/.bounce
+source confirm
+
+NODES=$(docker ps | grep k3s | grep node -c)
+
+docker ps | grep k3s | grep node | awk '{print $1}' > /tmp/.bounce
+cat /tmp/.bounce | xargs docker stop
+cat /tmp/.bounce | xargs docker rm
+rm /tmp/.bounce
+
+scale_k3s $NODES

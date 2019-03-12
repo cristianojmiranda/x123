@@ -1,0 +1,5 @@
+#!/bin/bash
+source env.sh
+
+echo "Scaling k3s cluster to $1 nodes...."
+docker-compose --file=$_RESOURCES/k3s-docker-compose.yaml up -d --scale node=$1

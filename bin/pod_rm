@@ -2,5 +2,6 @@
 echo "removing pods"
 kube_info
 pod_ls $1
+
 source confirm
 pod_ls $1 | awk '{print $1}' | xargs kk delete po

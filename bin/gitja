@@ -1,0 +1,7 @@
+#!/bin/bash
+echo "git add -A"
+if [[ $# -eq 0 ]] ; then
+	git add -A
+else
+	git add $@
+fi
