@@ -64,3 +64,10 @@ echo "Fetching Consul..."
 	sudo mv consul /usr/local/bin/consul
 	rm consul.zip
 fi
+
+# intall telepresence
+if ! type "telepresence" > /dev/null; then
+	echo "Install telepresence..."
+	curl -s https://packagecloud.io/install/repositories/datawireio/telepresence/script.deb.sh | sudo bash
+	sudo apt install --no-install-recommends telepresence
+fi

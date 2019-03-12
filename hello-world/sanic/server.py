@@ -4,7 +4,7 @@ from sanic import Sanic
 from sanic.response import json
 from sanic.response import text
 
-MYSELF_ENDPOINT="http://localhost/8000"
+MYSELF_ENDPOINT="http://localhost:8000"
 if "ENDPOINT" in os.environ:
     MYSELF_ENDPOINT = os.environ["ENDPOINT"]
 
