@@ -3,3 +3,5 @@ source env.sh
 
 echo "Scaling k3s cluster to $1 nodes...."
 docker-compose --file=$_RESOURCES/k3s-docker-compose.yaml up -d --scale node=$1
+
+echo "Hey! If you are scaling down, it is recommended to remove the old nodes manually from k8s context. Like kk delete node <node_id>"

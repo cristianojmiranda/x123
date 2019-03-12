@@ -65,9 +65,16 @@ echo "Fetching Consul..."
 	rm consul.zip
 fi
 
+# install python3.7
+
 # intall telepresence
 if ! type "telepresence" > /dev/null; then
 	echo "Install telepresence..."
-	curl -s https://packagecloud.io/install/repositories/datawireio/telepresence/script.deb.sh | sudo bash
+	#curl -s https://packagecloud.io/install/repositories/datawireio/telepresence/script.deb.sh | sudo bash
+	#sudo apt install --no-install-recommends telepresence
+
+	curl -sO https://packagecloud.io/install/repositories/datawireio/telepresence/script.deb.sh
+	sudo env os=ubuntu dist=xenial bash script.deb.sh
 	sudo apt install --no-install-recommends telepresence
+	rm script.deb.sh
 fi

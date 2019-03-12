@@ -9,6 +9,7 @@ NODES=$(docker ps | grep k3s | grep node -c)
 docker ps | grep k3s | grep node | awk '{print $1}' > /tmp/.bounce
 cat /tmp/.bounce | xargs docker stop
 cat /tmp/.bounce | xargs docker rm
+cat /tmp/.bounce | xargs kk delete node
 rm /tmp/.bounce
 
 scale_k3s $NODES
