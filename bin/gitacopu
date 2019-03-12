@@ -9,8 +9,13 @@ gits
 source confirm "Add all?"
 gitja
 
+echo
 source confirm "Commit?"
 gitco $1
 
+echo
 source confirm "Push?"
 gitpu $2
+
+echo
+gits
