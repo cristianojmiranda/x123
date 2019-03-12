@@ -1,9 +1,10 @@
 #!/bin/bash
 source env.sh
 
-#echo "=== ==="
-docker-compose --file=$_RESOURCES/docker-compose.yml up -d
+echo "Starting k3s cluster...."
+docker-compose --file=$_RESOURCES/k3s-docker-compose.yaml up -d
 
+echo "Waiting cluster to be ready..."
 while true; do
 	if [[ -f $_WORKDIR/kubeconfig.yaml ]]; then
 		break
@@ -15,8 +16,8 @@ done
 
 mkdir -p ~/.kube
 cat $_WORKDIR/kubeconfig.yaml  > ~/.kube/config
-kubectl cluster-info
+kube_info
 
 # fix dns
 kubectl apply -f $_RESOURCES/coredns.yaml
-docker-compose --file=$_RESOURCES/docker-compose.yml logs --follow
+docker-compose --file=$_RESOURCES/k3s-docker-compose.yaml logs --follow

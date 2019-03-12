@@ -1,0 +1,13 @@
+#!/bin/bash
+echo "git add ."
+git diff
+gits
+
+if [[ $# -eq 0 ]] ; then
+	git add .
+else
+	git add $@
+fi
+
+
+

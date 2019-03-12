@@ -1,2 +1,5 @@
 #!/bin/bash
+echo "git status"
 git status
+echo
+gitu

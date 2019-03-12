@@ -1,0 +1,14 @@
+#!/bin/bash
+if [[ $# -eq 0 ]] ; then
+	echo "push_k3s <docker_image>"
+	exit 1
+fi
+
+if [[ $(docker image ls | grep $1 -c) == 0 ]] ; then
+	echo "You must buill or pull the image $1 first. Like: docker pull $1 or docker build -t $1 ."
+else
+	mkdir -p /tmp/images
+	docker save $1 -o /tmp/images/$1.tar
+	echo
+	echo "Don't forget to use imagePullPolicy 'IfNotPresent' at your deployment"
+fi

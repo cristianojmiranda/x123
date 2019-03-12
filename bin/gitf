@@ -1,4 +1,5 @@
 #!/bin/bash
+echo "git fetch all"
 gits
 git fetch --all
 

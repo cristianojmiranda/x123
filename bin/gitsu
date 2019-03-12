@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [[ $# -eq 2 ]] ; then
+	echo "Git config => user name: $1, email: $2"
+	source confirm
+	git config --global user.name "$1"
+	git config --global user.email $2
+else
+	echo "Please inform: gitsu <name> <email>"
+fi

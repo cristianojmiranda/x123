@@ -1,2 +1,2 @@
 #!/bin/bash
-pod_ls $1 | grep Running | shuf | head -n 1 | awk '{print $1}'
+pod_ls $1 | shuf | head -n 1 | awk '{print $1}'

@@ -1,0 +1,5 @@
+#!/bin/bash
+echo "git branch -d"
+
+source confirm "Remove branch $1?"
+git branch -d $1

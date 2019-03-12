@@ -1,0 +1,2 @@
+#!/bin/bash
+echo "Git config => user name: `git config --global user.name `, email: `git config --global user.email`"

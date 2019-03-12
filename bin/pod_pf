@@ -1,6 +1,6 @@
 #!/bin/bash
-POD=pod_get $1
-kk cluster-info
+kube_info
+POD=pod_get_run $1
 echo "$POD"
 
 kk port-forward $POD $2

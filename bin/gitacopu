@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [[ $# -ne 2 ]]; then
+	echo "You must specify commit message and branch. Like: gitacopu 'add ...' TEST-1"
+	exit 1
+fi
+
+gits
+source confirm "Add all?"
+gita
+
+source confirm "Commit?"
+gitco $1
+
+source confirm "Push?"
+gitpu $2
