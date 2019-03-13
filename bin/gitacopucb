@@ -1,0 +1,23 @@
+#!/bin/bash
+echo "git add -A, commit and push at the current branch"
+if [[ $# -ne 1 ]]; then
+	echo "You must specify commit message. Like: gitacopucb 'adding ...'"
+	exit 1
+fi
+
+#gitacopu $1 "$(git branch | grep '*' | awk '{print $2}')"
+
+gits
+source confirm "Add all?"
+gitja
+
+echo
+source confirm "Commit?"
+gitco $1
+
+echo
+source confirm "Push?"
+gitpu $(git branch | grep '*' | awk '{print $2}')
+
+echo
+gits
