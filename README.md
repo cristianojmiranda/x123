@@ -39,7 +39,7 @@
  * **pod_logs** - pod logs by partial pod name
  * **pod_rm** - remove all pods by partial name
  * **pod_ssh** - pod ssh by partial name
- * **kubeconfig_backup** - backup your current kubeconfig file to env name `~/.kube/config_<ENV_NAME>`
+ * **kubeconfig_backup** - backup your current kubeconfig file to env name _~/.kube/config_<ENV_NAME>_
  * **kubeconfig_load** - load the kubeconfig file by env (saved by **kubeconfig_backup**)
  * **kk** - kubectl alias
  * **kke** - kubectl by env
