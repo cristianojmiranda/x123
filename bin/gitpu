@@ -1,4 +1,15 @@
 #!/bin/bash
-gits
-git push origin $1
 
+echo "git push"
+if [[ $# -eq 0 ]]; then
+	echo "Inform the branch to push, eg gitpu <branch>"
+	exit 1
+fi
+
+gits
+if [[ "$(git branch | grep '*' | awk '{print $2}')" != "$1" ]]; then
+	echo "Invalid branch"
+	exit 1
+fi
+
+git push origin $1
