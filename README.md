@@ -61,3 +61,9 @@
  * **gits** - `git status`
 
 ## References
+ [k3s](https://k3s.io/)
+ [consul](https://www.consul.io/)
+ [vault](https://www.vaultproject.io/)
+ [kubernetes](https://kubernetes.io/)
+ [jq] (https://stedolan.github.io/jq/)
+ [jqplay] (https://jqplay.org/)
