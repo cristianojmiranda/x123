@@ -49,7 +49,7 @@
 ### git
 
  * **gitcl** - `git clone`
- * **gitnb** - create a new branch `git checkout -b <branch>`
+ * **gitnb** - create a new branch based on fresh master `git checkout -b <branch>`
  * **gitc** - `git checkout`
  * **gitd** - `git diff`
  * **gita** - `git add .`
