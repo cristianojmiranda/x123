@@ -1,2 +1,2 @@
 #!/bin/bash
-kk get pods | grep $1
+kk get pods -o wide | grep $1

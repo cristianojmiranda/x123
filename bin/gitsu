@@ -1,4 +1,5 @@
 #!/bin/bash
+echo "git config setup user"
 
 if [[ $# -eq 2 ]] ; then
 	echo "Git config => user name: $1, email: $2"

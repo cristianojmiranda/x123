@@ -2,4 +2,4 @@
 #kubectl set env --all deployment --list
 kube_info
 source confirm
-kubectl set env $1 --env="LAST_MANUAL_RESTART=$(date +%s)"
+kk set env $1 --env="LAST_MANUAL_RESTART=$(date +%s)"

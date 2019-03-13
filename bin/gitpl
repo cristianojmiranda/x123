@@ -1,4 +1,5 @@
 #!/bin/bash
+echo "git pull"
 gits
 git pull origin $1
 

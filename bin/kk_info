@@ -1,0 +1,4 @@
+#!/bin/bash
+kk get nodes -o wide
+echo
+kk cluster-info
