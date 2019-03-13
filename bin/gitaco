@@ -1,0 +1,18 @@
+#!/bin/bash
+echo "git add -A and commit"
+if [[ $# -ne 1 ]]; then
+	echo "You must specify commit message. Like: gitaco 'add ...'"
+	exit 1
+fi
+
+gitd
+gits
+source confirm "Add all?"
+gitja
+
+echo
+source confirm "Commit?"
+gitco $1
+
+echo
+gits

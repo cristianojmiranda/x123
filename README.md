@@ -11,7 +11,7 @@
  > New softwares will be installed in you machine and will be created new shortcuts at `~/bin`.<br />
  > Before intall this make sure that your don't have any conflict of files in `~/bin` with this repo at the risk to be overwritten.<br />
  > The shortcuts could be harmful for you production cluster, use it by your own risk.<br />
- > I recommend you to explore your `~/bin` folder after install or check just `bin` folder at this repo. The documentation could be commits behind of available scripts.<br />
+ > I recommend you to explore your `~/bin` folder after install or just check `bin` folder on this repo. The documentation could be behind of available shortcuts.<br />
 
 ## Scripts and Shortcuts
 
