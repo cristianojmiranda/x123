@@ -1,14 +1,11 @@
 #!/bin/bash
-echo "git add -A, commit and push"
+echo "git commit and push"
 if [[ $# -ne 2 ]]; then
 	echo "You must specify commit message and branch. Like: gitacopu 'add ...' TEST-1"
 	exit 1
 fi
 
-#gitd
 gits
-source confirm "Add all?"
-gitja
 
 echo
 source confirm "Commit?"

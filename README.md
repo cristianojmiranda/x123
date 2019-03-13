@@ -49,9 +49,12 @@
  * **gitcl** - `git clone`
  * **gitnb** - create a new branch `git checkout -b <branch>`
  * **gitc** - `git checkout`
+ * **gitd** - `git diff`
  * **gita** - `git add .`
  * **gitco** - `git commit -m`
  * **gitpu** - `git push`
- * **gitacopu** - git add, commit and push
+ * **gitcopu** - git commit and push
+ * **gitacopu** - git add -A, commit and push
+ * **gits** - `git status`
 
 ## References
