@@ -7,6 +7,7 @@ from sanic.response import text
 MYSELF_ENDPOINT="http://localhost:8000"
 if "ENDPOINT" in os.environ:
     MYSELF_ENDPOINT = os.environ["ENDPOINT"]
+print("MYSELF_ENDPOINT=%s" % MYSELF_ENDPOINT)
 
 app = Sanic()
 
@@ -29,6 +30,7 @@ def F(n):
 '''
 @app.route("/fibb/<n:int>")
 async def fibb(request, n):
+    print('fibb=%i', n)
     if n == 0: return text("0")
     elif n == 1: return text("1")
     f = remote_fibb(n-1) + remote_fibb(n-2)
@@ -39,4 +41,4 @@ async def health(request):
     return text('OK')
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8000)
+    app.run(host="0.0.0.0", port=8000, workers=4)

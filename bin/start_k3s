@@ -3,7 +3,12 @@ source env.sh
 
 echo "Starting k3s cluster...."
 mkdir /tmp/images
-docker-compose --file=$_RESOURCES/k3s-docker-compose.yaml up -d
+
+if [[ -e $_WORKDIR/k3s_nodes ]]; then
+	docker-compose --file=$_RESOURCES/k3s-docker-compose.yaml up -d --scale node=$(cat $_WORKDIR/k3s_nodes)
+else
+	docker-compose --file=$_RESOURCES/k3s-docker-compose.yaml up -d
+fi
 
 echo "Waiting cluster to be ready..."
 while true; do

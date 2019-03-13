@@ -1,0 +1,7 @@
+#!/bin/bash
+echo 'Removing not ready nodes...'
+kk get nodes | grep NotReady | awk '{print $1}' | xargs kk delete node
+
+echo 'Status'
+docker ps | grep k3s
+kk get nodes

@@ -1,0 +1,2 @@
+#!/bin/bash
+kk_scale deployment/$1 $2

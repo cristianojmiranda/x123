@@ -1,0 +1,8 @@
+#!/bin/bash
+if [[ $# -eq 2 ]]; then
+	kube_info
+	source confirm "Are you sure that you want scale $1 to $2 pod(s)?"
+	kk scale $1 --replicas=$2
+else
+	echo "Inform resource name and pods, eg kk_scale deployment/app1 10"
+fi

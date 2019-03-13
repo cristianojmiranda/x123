@@ -6,6 +6,7 @@ docker-compose --file=$_RESOURCES/k3s-docker-compose.yaml down
 
 echo "Removing kubeconfig..."
 rm -f $_WORKDIR/kubeconfig.yaml
+rm $_WORKDIR/k3s_nodes
 
 echo "Removing docker containers and volumes...."
 docker ps  -a | grep k3s | awk '{print $1}' | xargs docker rm
