@@ -5,6 +5,7 @@ if [[ $# -ne 2 ]]; then
 	exit 1
 fi
 
+gitd
 gits
 source confirm "Add all?"
 gitja

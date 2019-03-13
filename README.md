@@ -43,4 +43,6 @@ curl -sfL https://raw.githubusercontent.com/cristianojmiranda/x123/master/instal
  * **gitcl** - `git clone`
  * **gitnb** - create a new branch `git checkout -b <branch>`
  * **gita** - `git add .`
+ * **gitco** - `git commit -m`
+ * **gitpu** - `git push`
  * **gitacopu** - git add, commit and push
