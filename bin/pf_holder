@@ -1,0 +1,35 @@
+#!/bin/bash
+echo "port-forward holder"
+echo
+
+if [[ $# -eq 0 ]]; then
+	echo "Please Inform the port to be checked, eg pf_holder <port> <optional_path> <optional_sleep>"
+else
+
+	PATH_URL="/health"
+	if [[ $# -ge 2 ]]; then
+		PATH_URL=$2
+	fi
+
+	SLEEP=10
+	if [[ $# -ge 3 ]]; then
+		SLEEP=$3
+	fi
+
+	if [[ $(ps -Af | grep kubectl | grep port-forward | grep "$1" -c) -eq 0 ]]; then
+		echo "There is no port-forward process running for $1"
+		exit 1
+	fi
+
+	PF_PID=$(ps -Af | grep kubectl | grep port-forward | grep "$1" | awk '{print $2}')
+	echo "$PF_PID $PATH_URL $SLEEP"
+
+	#while true; do
+	while [ -n "$(ps -p $PF_PID -o pid=)" ]; do
+		curl -i "http://localhost:$1$PATH_URL" -w '\nTIME => %{time_connect}:%{time_starttransfer}:%{time_total}\n'
+		echo
+		sleep $SLEEP;
+	done
+	echo "Done"
+
+fi

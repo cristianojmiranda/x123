@@ -1,17 +1,22 @@
 # x123
 
+ Tools to make your live easy with kubernetes, k3s, git
+
 ## Install
 
-```
-curl -sfL https://raw.githubusercontent.com/cristianojmiranda/x123/master/install.sh | sh -
-```
+ ```
+ curl -sfL https://raw.githubusercontent.com/cristianojmiranda/x123/master/install.sh | sh -
+ ```
 
-## Scripts
+ > New softwares will be installed in you machine and will be created new shortcuts at `~/bin`. 
+ > The shortcuts could be harmful for you production cluster, use it by your own risk.
+
+## Scripts and Shortcuts
 
 ### k3s
 
  Script tools to work easily with k3s cluster locally
- * **start_k3s** - start a local cluster running inside docker (keep your machine clean from containerds)
+ * **start_k3s** - start a local cluster running inside docker (keep your machine clean from containerds, your ~/.kube/config will be replaced)
  * **stop_k3s** - stop the k3s cluster
  * **remove_k3s** - remove the cluster
  * **reset_k3s** - remove Not Ready nodes from cluster
@@ -27,6 +32,7 @@ curl -sfL https://raw.githubusercontent.com/cristianojmiranda/x123/master/instal
 
  * **deployment_bounce** - bounce pod by pod from deployment. No downtime.
  * **pod_pf** - port-forward to partial pod name, eg `pod_pf my_app[name] 8080:8081`
+ * **pf_holder** - keep the port-forward up, eg `pf_holder <port> <path> <sleep>`, `$(svc_pf sanic 8081:8000 &) & pf_holder 8081`
  * **svc_pf** - service port-forward
  * **pod_logs** - pod logs by partial pod name
  * **pod_rm** - remove all pods by partial name
@@ -42,7 +48,10 @@ curl -sfL https://raw.githubusercontent.com/cristianojmiranda/x123/master/instal
 
  * **gitcl** - `git clone`
  * **gitnb** - create a new branch `git checkout -b <branch>`
+ * **gitc** - `git checkout`
  * **gita** - `git add .`
  * **gitco** - `git commit -m`
  * **gitpu** - `git push`
  * **gitacopu** - git add, commit and push
+
+## References

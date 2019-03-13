@@ -1,0 +1,6 @@
+#!/bin/bash
+kube_info
+source confirm "Are you sure that you want bounce all app?"
+kubectl set env --all deployment --env="LAST_MANUAL_RESTART=$(date +%s)"
+kubectl set env --all statefulset --env="LAST_MANUAL_RESTART=$(date +%s)"
+kubectl set env --all daemonset --env="LAST_MANUAL_RESTART=$(date +%s)"

@@ -1,0 +1,20 @@
+#!/bin/bash
+source env.sh
+
+if [[ $# -eq 0 ]] ; then
+	echo "Inform resource name. Like: deploy_k8s <resource>"
+	echo "resources available:"
+	ls -l $_RESOURCES | grep yaml | grep -v compose | awk '{print $9}'
+fi
+
+if [[ ! -e $_RESOURCES/$1.yaml ]]; then
+	echo "resource not found"
+	exit 1
+fi
+
+kube_info
+
+cat $_RESOURCES/$1.yaml
+source confirm
+
+kk apply -f $_RESOURCES/$1.yaml

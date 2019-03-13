@@ -1,4 +1,4 @@
 #!/bin/bash
-#kubectl set env deployment/sample-build --list
+#kubectl set env --all deployment --list
 #kubectl set env deployment/$1 --env="LAST_MANUAL_RESTART=$(date +%s)"
 kk_bounce deployment/$1
