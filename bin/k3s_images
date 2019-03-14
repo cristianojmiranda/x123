@@ -1,0 +1,2 @@
+#!/bin/bash
+docker exec -it $(docker ps | grep k3s | grep node | shuf | head -n 1 | awk '{print $1}') sh -c "crictl images"

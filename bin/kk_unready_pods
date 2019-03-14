@@ -1,2 +1,2 @@
 #!/bin/bash
-kk_pods | grep 0/1
+kk_pods -o wide | grep 0/1

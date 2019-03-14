@@ -101,3 +101,8 @@ if ! type "atom" > /dev/null; then
 	wget https://github.com/atom/atom/releases/download/v1.35.1/atom-amd64.deb -O /tmp/atom.deb
 	sudo dpkg -i /tmp/atom.deb
 fi
+
+# intall terminator
+if ! type "terminator" > /dev/null; then
+	echo "Installing terminator..."
+fi
