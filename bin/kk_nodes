@@ -1,0 +1,2 @@
+#!/bin/bash
+kk get nodes -o wide

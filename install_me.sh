@@ -66,16 +66,38 @@ echo "Fetching Consul..."
 fi
 
 # install python3.7
-# TODO:
+if ! type "python3.7" > /dev/null; then
+	echo "Installing python3.7..."
+	sudo apt-get install build-essential checkinstall
+	sudo apt-get install libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
+
+	cd /usr/src
+	sudo wget https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tgz
+	sudo tar xzf Python-3.7.2.tgz
+
+	cd Python-3.7.2
+	sudo ./configure --enable-optimizations
+	sudo make altinstall
+
+	#alias python=python3.7
+	#sudo ln -sf /usr/local/bin/python3.7 /usr/bin/python3
+fi
 
 # intall telepresence
 if ! type "telepresence" > /dev/null; then
 	echo "Install telepresence..."
-	#curl -s https://packagecloud.io/install/repositories/datawireio/telepresence/script.deb.sh | sudo bash
-	#sudo apt install --no-install-recommends telepresence
-
-	curl -sO https://packagecloud.io/install/repositories/datawireio/telepresence/script.deb.sh
-	sudo env os=ubuntu dist=xenial bash script.deb.sh
+	curl -s https://packagecloud.io/install/repositories/datawireio/telepresence/script.deb.sh | sudo bash
 	sudo apt install --no-install-recommends telepresence
-	rm script.deb.sh
+
+	#curl -sO https://packagecloud.io/install/repositories/datawireio/telepresence/script.deb.sh
+	#sudo env os=ubuntu dist=xenial bash script.deb.sh
+	#sudo apt install --no-install-recommends telepresence
+	#rm script.deb.sh
+fi
+
+# intall atom
+if ! type "atom" > /dev/null; then
+	echo "Installing atom..."
+	wget https://github.com/atom/atom/releases/download/v1.35.1/atom-amd64.deb -O /tmp/atom.deb
+	sudo dpkg -i /tmp/atom.deb
 fi

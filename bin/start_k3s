@@ -2,6 +2,7 @@
 source env.sh
 
 echo "Starting k3s cluster...."
+mkdir /tmp/data
 mkdir /tmp/images
 
 if [[ -e $_WORKDIR/k3s_nodes ]]; then
