@@ -1,6 +1,10 @@
 #!/bin/bash
+kk_info
 POD=$(pod_get $1)
-kk cluster-info
-echo "$POD"
+echo "pod=$POD"
 
-kk exec -it $POD sh
+if [[ $# -gt 1 ]]; then
+  kk exec -it $POD ${@:2}
+else
+  kk exec -it $POD sh
+fi

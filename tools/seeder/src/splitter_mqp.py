@@ -1,5 +1,5 @@
 import api_client
-from rabbitmq import channel, publish
+from rabbitmq import connection, publish
 
 def callback(ch, method, properties, body):
 	print(" [x] Received %r" % body)
@@ -10,6 +10,7 @@ def callback(ch, method, properties, body):
 		message['data'] = data
 		publish('seeder-exchange', 'seeder-transform', message)
 
+channel = connection.channel()
 channel.basic_consume(callback, queue='seeder-split')
 
 print(' [*] Waiting for messages. To exit press CTRL+C')

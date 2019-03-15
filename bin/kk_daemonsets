@@ -1,0 +1,2 @@
+#!/bin/bash
+kk get daemonsets -o wide

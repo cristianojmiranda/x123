@@ -7,7 +7,7 @@ import rabbitmq
 
 app = Sanic()
 
-@app.route("/seed/:store", methods=['POST'])
+@app.route("/seed/<store>", methods=['POST'])
 async def seed(request, store):
 	id = fstore.save(request.files["file"][0].body)
 	message = {'id': id, 'storage': store, 'name': request.files["file"][0].name}

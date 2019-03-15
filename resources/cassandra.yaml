@@ -58,7 +58,7 @@ spec:
         lifecycle:
           preStop:
             exec:
-              command: 
+              command:
               - /bin/sh
               - -c
               - nodetool drain
@@ -88,3 +88,14 @@ spec:
   - port: 9042
   selector:
     app: cassandra
+
+---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: cassandra-pdb
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: cassandra

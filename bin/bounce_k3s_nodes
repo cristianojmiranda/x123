@@ -1,15 +1,34 @@
 #!/bin/bash
 echo "Bounce the all k3s nodes"
-docker ps | grep k3s | grep node | awk '{print $1}' > /tmp/.bounce
-cat /tmp/.bounce
-source confirm
+#docker ps | grep k3s | grep node | awk '{print $1}'
+#source confirm
+#docker ps | grep k3s | grep node | awk '{print $1}' | xargs docker restart
 
-NODES=$(docker ps | grep k3s | grep node -c)
+CLUSTER_SIZE=$(docker ps | grep k3s | grep node -c)
+docker ps | grep k3s | grep node | awk '{print $1}' > /tmp/.k3s_nodes
+cat /tmp/.k3s_nodes
 
-docker ps | grep k3s | grep node | awk '{print $1}' > /tmp/.bounce
-cat /tmp/.bounce | xargs docker stop
-cat /tmp/.bounce | xargs docker rm
-cat /tmp/.bounce | xargs kk delete node
-rm /tmp/.bounce
+# double the cluster size
+NEW_CLUSTER_SIZE=$((2 * CLUSTER_SIZE))
+scale_k3s $NEW_CLUSTER_SIZE
 
-scale_k3s $NODES
+echo "Waiting cluster to be ready.."
+while [[ $(kk_nodes | grep -v NotReady | grep Ready -c) -lt $NEW_CLUSTER_SIZE ]]; do
+  echo "."
+  sleep 15
+done
+
+echo "Cluster ready!"
+kk get nodes | grep NotReady | awk '{print $1}' | xargs kk delete node
+kk_nodes
+
+echo "Draining old nodes..."
+cat /tmp/.k3s_nodes | xargs -I % kk drain %
+cat /tmp/.k3s_nodes | xargs kk delete node
+cat /tmp/.k3s_nodes | xargs docker stop
+cat /tmp/.k3s_nodes | xargs docker rm
+#rm -f /tmp/.k3s_nodes
+
+kk_nodes
+docker ps | grep k3s
+echo "done"

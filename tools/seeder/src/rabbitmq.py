@@ -29,4 +29,5 @@ channel.queue_bind(exchange='seeder', queue="seeder-transform", routing_key="tra
 channel.queue_bind(exchange='seeder', queue="seed", routing_key="seed")
 
 def publish(exchange, routing, message):
+	channel = connection.channel()
 	channel.basic_publish(exchange=exchange, routing_key=routing, body=str(message))

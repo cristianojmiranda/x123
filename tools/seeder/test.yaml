@@ -1,0 +1,16 @@
+addresses:
+  - street: xxx, xxxx xx xxxx
+    number: 111
+    zipcode: 111-111
+  - street: www, wwww ww wwww
+    number: 222
+    zipcode: 222-222
+
+---
+spring:
+  profiles: ci
+
+addresses:
+  - street: zzzzz, zz zzzzzzzzzzz
+    number: 999
+    zipcode: 999-999

@@ -7,9 +7,9 @@ if "FILE_STORAGE" in os.environ:
 if not os.path.exists(FILE_STORAGE):
 	os.makedirs(FILE_STORAGE)
 
-def save(body)
+def save(body):
 	id = str(uuid.uuid4())
-	with pen("%s%s" % (FILE_STORAGE, id), "wb") as f:
+	with open("%s%s" % (FILE_STORAGE, id), "wb") as f:
 		f.write(body)
 	return id
 

@@ -1,2 +1,14 @@
 #!/bin/bash
-kk port-forward svc/$1 $2
+
+if [[ $# -lt 2 ]]; then
+  echo "Please inform service name and port to bind. eg, svc_pf sanic 8001:8000"
+  exit 1
+fi
+
+SVC=$(kk_svc | grep $1 | head -n 1 | awk '{print $1}')
+if [[ "$SVC" == "" ]]; then
+  echo "Service not found"
+else
+  echo "service=$SVC"
+  kk port-forward "svc/$SVC" $2
+fi

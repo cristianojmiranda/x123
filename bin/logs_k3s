@@ -1,4 +1,3 @@
 #!/bin/bash
 source env.sh
-docker-compose --file=$_RESOURCES/k3s-docker-compose.yaml logs --follow
-
+docker-compose --file=$_K3S_DOCKER_COMPOSE logs --follow

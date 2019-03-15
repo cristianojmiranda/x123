@@ -1,30 +1,46 @@
 #!/bin/bash
 source env.sh
 
-echo "Starting k3s cluster...."
-mkdir /tmp/data
-mkdir /tmp/images
+if [[ $(docker ps | grep k3s | grep server -c) -eq 0 ]]; then
 
-if [[ -e $_WORKDIR/k3s_nodes ]]; then
-	docker-compose --file=$_RESOURCES/k3s-docker-compose.yaml up -d --scale node=$(cat $_WORKDIR/k3s_nodes)
+	echo "Starting k3s cluster...."
+	mkdir /tmp/data
+	mkdir /tmp/images
+	mkdir /tmp/volumes
+	mkdir /tmp/manifests
+
+	if [[ $# -eq 1 ]]; then
+		docker-compose --file=$_K3S_DOCKER_COMPOSE up -d --scale node=$1
+	else
+
+		if [[ -e $_WORKDIR/k3s_nodes ]]; then
+			docker-compose --file=$_K3S_DOCKER_COMPOSE up -d --scale node=$(cat $_WORKDIR/k3s_nodes)
+		else
+			docker-compose --file=$_K3S_DOCKER_COMPOSE up -d
+		fi
+
+	fi
+
+	echo "Waiting cluster to be ready..."
+	while true; do
+		if [[ -f $_WORKDIR/kubeconfig.yaml ]]; then
+			break
+		else
+			echo '.'
+			sleep 5
+		fi
+	done
+
+	echo "Replacing ~/.kube/config..."
+	mkdir -p ~/.kube
+	cat $_WORKDIR/kubeconfig.yaml  > ~/.kube/config
+	kube_info
+
+	# fix dns
+	kubectl apply -f $_RESOURCES/coredns.yaml
+
 else
-	docker-compose --file=$_RESOURCES/k3s-docker-compose.yaml up -d
+	echo "Cluster already have been running..."
 fi
 
-echo "Waiting cluster to be ready..."
-while true; do
-	if [[ -f $_WORKDIR/kubeconfig.yaml ]]; then
-		break
-	else
-		echo '.'
-		sleep 5
-	fi
-done
-
-mkdir -p ~/.kube
-cat $_WORKDIR/kubeconfig.yaml  > ~/.kube/config
-kube_info
-
-# fix dns
-kubectl apply -f $_RESOURCES/coredns.yaml
-docker-compose --file=$_RESOURCES/k3s-docker-compose.yaml logs --follow
+docker-compose --file=$_K3S_DOCKER_COMPOSE logs --follow

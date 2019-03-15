@@ -10,6 +10,7 @@ services:
     volumes:
     - k3s-server:/var/lib/rancher/k3s
     - /tmp:/var/lib/rancher/k3s/agent/images
+    - /tmp/manifests:/var/lib/rancher/k3s/server/manifests
     # This is just so that we get the kubeconfig file out
     - ~/.x123/:/output
     ports:
@@ -27,6 +28,7 @@ services:
     volumes:
     - /tmp/images:/var/lib/rancher/k3s/agent/images
     - /tmp/data:/data
+    - /tmp/volumes/:/k3s/volumes
 
 volumes:
   k3s-server: {}
