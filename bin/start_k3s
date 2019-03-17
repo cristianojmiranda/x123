@@ -22,13 +22,9 @@ if [[ $(docker ps | grep k3s | grep server -c) -eq 0 ]]; then
 	fi
 
 	echo "Waiting cluster to be ready..."
-	while true; do
-		if [[ -f $_WORKDIR/kubeconfig.yaml ]]; then
-			break
-		else
-			echo '.'
-			sleep 5
-		fi
+	while [[ ! -f $_WORKDIR/kubeconfig.yaml ]]; do
+		echo '.'
+		sleep 5
 	done
 
 	echo "Replacing ~/.kube/config..."
@@ -39,8 +35,16 @@ if [[ $(docker ps | grep k3s | grep server -c) -eq 0 ]]; then
 	# fix dns
 	kubectl apply -f $_RESOURCES/coredns.yaml
 
+	echo "Waiting cluster nodes to be ready(Hold tight it can take some minutes)..."
+	while [[ $(kk_nodes | grep -v NotReady | grep Ready -c) -eq 0 ]]; do
+		echo '.'
+		sleep 15
+	done
+
 else
-	echo "Cluster already have been running..."
+	echo "Cluster already have been started"
+	kk_info
 fi
 
-docker-compose --file=$_K3S_DOCKER_COMPOSE logs --follow
+#logs_k3s
+echo "Done. Up and running. If you wanna see the k3s logs run logs_k3s"

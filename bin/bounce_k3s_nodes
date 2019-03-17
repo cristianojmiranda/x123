@@ -12,23 +12,10 @@ cat /tmp/.k3s_nodes
 NEW_CLUSTER_SIZE=$((2 * CLUSTER_SIZE))
 scale_k3s $NEW_CLUSTER_SIZE
 
-echo "Waiting cluster to be ready.."
-while [[ $(kk_nodes | grep -v NotReady | grep Ready -c) -lt $NEW_CLUSTER_SIZE ]]; do
-  echo "."
-  sleep 15
-done
-
-echo "Cluster ready!"
-kk get nodes | grep NotReady | awk '{print $1}' | xargs kk delete node
-kk_nodes
-
 echo "Draining old nodes..."
 cat /tmp/.k3s_nodes | xargs -I % kk drain %
 cat /tmp/.k3s_nodes | xargs kk delete node
 cat /tmp/.k3s_nodes | xargs docker stop
 cat /tmp/.k3s_nodes | xargs docker rm
-#rm -f /tmp/.k3s_nodes
-
-kk_nodes
-docker ps | grep k3s
-echo "done"
+rm -f /tmp/.k3s_nodes
+echo "Done"

@@ -1,0 +1,13 @@
+#!/bin/bash
+echo 'Removing not ready nodes...'
+for node in $(kk_nodes | grep k3s | awk '{print $1}'); do
+    if [[ $(docker ps | grep k3s | grep -c $node) -eq 0 ]]; then
+      kk delete node $node
+    fi
+done
+
+echo
+echo 'Status'
+docker ps | grep k3s
+echo
+kk get nodes

@@ -1,2 +1,14 @@
 #!/bin/bash
-kk -n $1 ${@:2}
+if [[ $(echo "$1" | wc -c) -le 6 ]]; then
+  if [[ $(kk_ns | grep -c $1) -ge 1 ]]; then
+    NS=$(kk_ns | grep sys | awk '{print $1}')
+    echo "ns=$NS"
+    kk -n $NS ${@:2}
+  else
+    echo
+    echo "Not found namespace $1"
+    kk_ns
+  fi
+else
+  kk -n $1 ${@:2}
+fi

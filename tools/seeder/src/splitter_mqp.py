@@ -8,7 +8,7 @@ def callback(ch, method, properties, body):
 	for data in chunkies:
 		message = dict(body)
 		message['data'] = data
-		publish('seeder-exchange', 'seeder-transform', message)
+		publish('seeder', 'seeder-transform', message)
 
 channel = connection.channel()
 channel.basic_consume(callback, queue='seeder-split')

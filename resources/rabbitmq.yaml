@@ -47,14 +47,3 @@ spec:
   - name: manager
     port: 15672
     targetPort: 15672
-
----
-apiVersion: policy/v1beta1
-kind: PodDisruptionBudget
-metadata:
-  name: rabbitmq-pdb
-spec:
-  minAvailable: 1
-  selector:
-    matchLabels:
-      app: rabbitmq

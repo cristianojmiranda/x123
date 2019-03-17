@@ -4,7 +4,10 @@ MQ_HOST="localhost"
 if "MQ_HOST" in os.environ:
 	MQ_HOST = os.environ["MQ_HOST"]
 
-connection = pika.BlockingConnection(pika.ConnectionParameters(host=MQ_HOST))
+def get_connection():
+	return pika.BlockingConnection(pika.ConnectionParameters(host=MQ_HOST))
+
+connection = get_connection()
 channel = connection.channel()
 
 # exchange
@@ -29,5 +32,5 @@ channel.queue_bind(exchange='seeder', queue="seeder-transform", routing_key="tra
 channel.queue_bind(exchange='seeder', queue="seed", routing_key="seed")
 
 def publish(exchange, routing, message):
-	channel = connection.channel()
+	channel = get_connection().channel()
 	channel.basic_publish(exchange=exchange, routing_key=routing, body=str(message))

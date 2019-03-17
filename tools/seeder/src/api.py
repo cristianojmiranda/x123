@@ -1,4 +1,5 @@
 from sanic import Sanic
+from sanic.log import logger
 from sanic.response import json
 from sanic.response import text
 
@@ -11,7 +12,8 @@ app = Sanic()
 async def seed(request, store):
 	id = fstore.save(request.files["file"][0].body)
 	message = {'id': id, 'storage': store, 'name': request.files["file"][0].name}
-	rabbitmq.publish("seeder-exchange", "split", message)
+	logger.info("send '%s' to be splitted" % str(message))
+	rabbitmq.publish("seeder", "split", message)
 	return json(message)
 
 @app.route("/storage/file/:id", methods=['GET'])

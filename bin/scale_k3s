@@ -5,4 +5,12 @@ echo "Scaling k3s cluster to $1 nodes...."
 docker-compose --file=$_K3S_DOCKER_COMPOSE up -d --scale node=$1
 echo "$1" > $_WORKDIR/k3s_nodes
 
-echo "Hey! If you are scaling down, it is recommended to remove the old nodes manually from k8s context. Like kk delete node <node_id>. Or run reset_k3s"
+echo "Waiting cluster nodes to be ready(Hold tight it can take some minutes)..."
+while [[ $(kk_nodes | grep -v NotReady | grep Ready -c) -ne $1 ]]; do
+  echo '.'
+  sleep 15
+done
+
+resync_k3s_nodes
+kk_info
+kk_nodes
