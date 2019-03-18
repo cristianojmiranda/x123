@@ -8,20 +8,26 @@ import rabbitmq
 
 app = Sanic()
 
-@app.route("/seed/<store>", methods=['POST'])
-async def seed(request, store):
+@app.route("/seed/<store>/<profile>", methods=['POST'])
+async def seed(request, store, profile):
 	id = fstore.save(request.files["file"][0].body)
-	message = {'id': id, 'storage': store, 'name': request.files["file"][0].name}
+	extension = request.files["file"][0].name.split('.')[-1]
+	message = { 'id': id,
+				'storage': store,
+				'name': request.files["file"][0].name,
+				'type': extension,
+				'profile': profile
+			  }
 	logger.info("send '%s' to be splitted" % str(message))
 	rabbitmq.publish("seeder", "split", message)
 	return json(message)
 
-@app.route("/storage/file/:id", methods=['GET'])
+@app.route("/storage/file/<id>", methods=['GET'])
 async def get_file(request, id):
 	f = fstore.get(id)
 	return text(f)
 
-@app.route("/storage/file/:id", methods=['DELETE'])
+@app.route("/storage/file/<id>", methods=['DELETE'])
 async def get_file(request, id):
 	fstore.delete(id)
 	return text("DELETED")

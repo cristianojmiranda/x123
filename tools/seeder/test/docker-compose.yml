@@ -1,0 +1,85 @@
+version: '3'
+services:
+
+  consul:
+    image: consul
+    ports:
+      - 8500:8500
+
+  #vault:
+  #  image: vault
+  #  ports:
+  #    - "8200:8200"
+  #  environment:
+  #    - VAULT_DEV_ROOT_TOKEN_ID=v5ulT
+  #  cap_add:
+  #    - IPC_LOCK
+
+  rabbitmq:
+    image: rabbitmq:3.7.8-management-alpine
+    ports:
+      - 15672:15672
+
+  api:
+    image: my_seeder
+    command: >
+      sh -c "
+        while ! nc -z rabbitmq 15672; do
+          echo .;
+          sleep 5;
+        done;
+        python3 /app/api.py;
+      "
+    environment:
+      - MQ_HOST=rabbitmq
+    ports:
+      - 8000:8000
+    depends_on:
+      - rabbitmq
+
+  splitter:
+    image: my_seeder
+    command: >
+      sh -c "
+        while ! nc -z rabbitmq 15672; do
+          echo .;
+          sleep 5;
+        done;
+        python3 /app/splitter_mqp.py;
+      "
+    environment:
+      - MQ_HOST=rabbitmq
+      - API_URL=http://api:8000
+    depends_on:
+      - rabbitmq
+
+  transformer:
+    image: my_seeder
+    command: >
+      sh -c "
+        while ! nc -z rabbitmq 15672; do
+          echo .;
+          sleep 5;
+        done;
+        python3 /app/transformer_mqp.py;
+      "
+    environment:
+      - MQ_HOST=rabbitmq
+      - SPRING_PROFILE=ci
+    depends_on:
+      - rabbitmq
+
+  seeder:
+    image: my_seeder
+    command: >
+      sh -c "
+        while ! nc -z rabbitmq 15672; do
+          echo .;
+          sleep 5;
+        done;
+        python3 /app/seeder_mqp.py;
+      "
+    environment:
+      - MQ_HOST=rabbitmq
+    depends_on:
+      - rabbitmq

@@ -15,7 +15,7 @@ def save(body):
 
 def get(id):
 	with open("%s%s" % (FILE_STORAGE, id), "rb") as f:
-		return file.read()
+		return f.read()
 
 def delete(id):
 	os.remove("%s%s" % (FILE_STORAGE, id))

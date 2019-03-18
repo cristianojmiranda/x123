@@ -80,11 +80,11 @@ spec:
         app: seeder-splitter-mqp
     spec:
       containers:
-      - name: seeder-api
+      - name: seeder-splitter-mqp
         image: my_seeder
         imagePullPolicy: IfNotPresent
         command: ["python3"]
-        args: ["seeder_mqp.py"]
+        args: ["splitter_mqp.py"]
         env:
         - name: MQ_HOST
           value: rabbitmq
@@ -115,7 +115,7 @@ spec:
         app: seeder-transformer-mqp
     spec:
       containers:
-      - name: seeder-api
+      - name: seeder-transformer-mqp
         image: my_seeder
         imagePullPolicy: IfNotPresent
         command: ["python3"]
@@ -150,7 +150,7 @@ spec:
         app: seeder-mqp
     spec:
       containers:
-      - name: seeder-api
+      - name: seeder-mqp
         image: my_seeder
         imagePullPolicy: IfNotPresent
         command: ["python3"]

@@ -1,14 +1,11 @@
 import os
+import utils
 import requests
 
-API_URL="http://localhost:8000"
-if "API_URL" in os.environ:
-	API_URL = os.environ["API_URL"]
+API_URL=utils.env("API_URL", "http://localhost:8000")
 
 def get_file(id):
-	resp = requests.get("%s/storage/file/%s" % (API_URL, id))
-	return resp.text
+	return requests.get("%s/storage/file/%s" % (API_URL, id))
 
 def delete_file(id):
-	resp = requests.delete("%s/storage/file/%s" % (API_URL, id))
-	return resp.text
+	return requests.delete("%s/storage/file/%s" % (API_URL, id))

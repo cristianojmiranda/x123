@@ -18,4 +18,5 @@ cat /tmp/.k3s_nodes | xargs kk delete node
 cat /tmp/.k3s_nodes | xargs docker stop
 cat /tmp/.k3s_nodes | xargs docker rm
 rm -f /tmp/.k3s_nodes
+wait_pods
 echo "Done"
