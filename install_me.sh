@@ -34,6 +34,15 @@ if ! type "k3s" > /dev/null; then
 	sudo mv vault /usr/local/bin
 fi
 
+# install k9s
+if ! type "k9s" > /dev/null; then
+	echo "Installing k9s..."
+	wget https://github.com/derailed/k9s/releases/download/0.2.6/k9s_0.2.6_Linux_x86_64.tar.gz -O k9s.tar.gz
+	tar -xvzf k9s.tar.gz
+	chmod +x k9s
+	sudo mv k9s /usr/local/bin
+fi
+
 # intall kubectl
 if ! type "kubectl" > /dev/null; then
 	echo "Installing kubectl..."
