@@ -6,16 +6,18 @@ from sanic.response import text
 import fstore
 import rabbitmq
 
+rabbitmq.create_exchange("seeder");
 app = Sanic()
 
 @app.route("/seed/<store>/<profile>", methods=['POST'])
 async def seed(request, store, profile):
 	id = fstore.save(request.files["file"][0].body)
 	extension = request.files["file"][0].name.split('.')[-1]
+	name = request.files["file"][0].name.split('.')[0]
 	message = { 'id': id,
 				'storage': store,
-				'name': request.files["file"][0].name,
-				'type': extension,
+				'name': name,
+				'type': extension if extension not in ['yaml', 'yml'] else 'yaml',
 				'profile': profile
 			  }
 	logger.info("send '%s' to be splitted" % str(message))

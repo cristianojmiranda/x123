@@ -1,5 +1,7 @@
 # Seeder
 
+`file(s) > api > splitter > transform/filter > seed`
+
 ## Build
 
 ```

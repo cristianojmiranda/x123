@@ -1,3 +1,6 @@
+spring:
+  profiles: dev
+
 addresses:
   - street: xxx, xxxx xx xxxx
     number: 111
