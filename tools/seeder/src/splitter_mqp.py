@@ -1,37 +1,51 @@
-import utils, json, api_client, rabbitmq
+import logging, json
+import utils, api_client, rabbitmq
 
+exchange = 'seeder'
 queue_name = 'seeder-split'
 
 conn = rabbitmq.get_connection()
-rabbitmq.create_exchange("seeder", conn);
-rabbitmq.create_queue(queue_name, 'seeder', 'split', conn)
+rabbitmq.create_exchange(exchange, conn);
+rabbitmq.create_queue(queue_name, exchange, 'split', conn)
 
 def callback(ch, method, properties, body):
 
-	try:
-		p_body = json.loads(body)
-		resp = api_client.get_file(p_body['id'])
+	p_body = json.loads(body)
+	id = p_body['id']
+	type = p_body['type']
+	message = dict(p_body)
 
-		if resp.status_code == 200:
-			print("Failed to get file %i" % resp.status_code)
-			#ch.basic_nack(delivery_tag = method.delivery_tag, requeue=True)
-			rabbitmq.publish('seeder', 'seeder-split-retry', body, conn)
-			ch.basic_ack(delivery_tag = method.delivery_tag)
-			return
+	# get file by id
+	resp = api_client.get_file(id)
+	if resp.status_code != 200:
+		raise rabbitmq.RetryException("Failed to get file %s. [HTTP_STATUS=%i] - %s" % (id, resp.status_code, resp.text))
 
-		raw_data = resp.text
-		print("raw_file=[%s]" % raw_data)
+	raw_data = resp.text
+	logging.info("raw_file=[%s]" % raw_data)
+
+	if type == 'yaml':
 		for data in raw_data.split('---'):
-			message = dict(p_body)
-			#message['data'] = utils.encode(data)
 			message['data'] = data
-			rabbitmq.publish('seeder', 'transform', message, conn)
+			rabbitmq.publish(exchange, 'transform', message, conn)
 
-		api_client.delete_file(p_body['id'])
-		ch.basic_ack(delivery_tag = method.delivery_tag)
-	except Exception as e:
-		print("Failed", e)
-		rabbitmq.publish('seeder', 'split-dl', body, conn)
-		#ch.basic_nack(delivery_tag = method.delivery_tag, requeue=True)
+	elif type == 'json':
+
+		j_body = json.loads(raw_data)
+		if utils.has_key('seeder.splitter-key', j_body):
+			s_key = utils.get_key('seeder.splitter-key', j_body)
+			for data in j_body[s_key]:
+				message['data'] = data
+				rabbitmq.publish(exchange, 'transform', message, conn)
+
+		else:
+			message['data'] = raw_data
+			rabbitmq.publish(exchange, 'transform', message, conn)
+
+	else:
+		message['data'] = raw_data
+		rabbitmq.publish(exchange, 'transform', message, conn)
+
+
+	api_client.delete_file(id)
 
 rabbitmq.consumer(queue_name, callback, conn)

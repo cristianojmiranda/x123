@@ -1,5 +1,5 @@
 import os, pika, json
-import utils
+import utils, logging
 
 MQ_HOST = utils.env("MQ_HOST", "localhost")
 MQ_PORT = int(utils.env("MQ_PORT", 5672))
@@ -8,7 +8,7 @@ MQ_PASS = utils.env("MQ_PASS", "guest")
 MQ_VHOST = utils.env("MQ_VHOST", "/")
 
 MQ_TTL_RETRY = int(utils.env("MQ_TTL_RETRY", 60000))
-MQ_MAX_RETRIES = int(utils.env("MQ_MAX_RETRIES", 10))
+MQ_MAX_RETRIES = int(utils.env("MQ_MAX_RETRIES", 3))
 MQ_PRE_FETCH = int(utils.env("MQ_PRE_FETCH", 1))
 
 credentials = pika.PlainCredentials(MQ_USER, MQ_PASS)
@@ -45,33 +45,47 @@ def create_queue(name, exchange, routing_key, conn=None):
 	channel.queue_bind(exchange=exchange, queue="%s-retry" % name, routing_key="%s-retry" % name)
 	channel.queue_bind(exchange=exchange, queue="%s-dl" % name, routing_key="%s-dl" % name)
 
-def publish(exchange, routing, message, conn=None):
-	print("publish [%s] to '%s' exchange with routing '%s'" % (str(message), exchange, routing))
+def publish(exchange, routing, message, conn=None, headers=None):
+	logging.info("publishing [%s] to '%s' exchange with routing '%s'" % (str(message), exchange, routing))
 	channel = get_channel(conn)
 	_body = json.dumps(message) if type(message) is dict else message
-	channel.basic_publish(exchange=exchange, routing_key=routing, body=_body)
-	print("published")
+	props=pika.spec.BasicProperties(headers=headers)
+	channel.basic_publish(exchange=exchange, routing_key=routing, body=_body, properties=props)
+	logging.info("published")
 
 def consumer(queue, callback, conn=None):
 
 	def _callback(ch, method, properties, body):
-		print(" [x] Received {%r} at '%s'" % (body, queue))
+		logging.info(" [x] Received %r. Queue %s" % (body, queue))
 		s_body = body.decode("UTF-8")
+
 		try:
+
 			if callback:
 				callback(ch, method, properties, s_body)
+
 		except RetryException as r:
-			print("Failed with retry", e)
-			publish("", "%s-retry" % queue, s_body, conn)
+			logging.error(r)
+
+			retry_count = 1
+			if properties.headers and 'retry_count' in properties.headers:
+				retry_count = int(properties.headers['retry_count']) + 1
+
+			if retry_count > MQ_MAX_RETRIES:
+				logging.warn("Exceeded retries!!! %i" % retry_count)
+				publish("", "%s-dl" % queue, s_body, conn)
+			else:
+				publish("", "%s-retry" % queue, s_body, conn, {'retry_count': retry_count})
+
 		except Exception as e:
-			print("Failed moving to dead-leatter", e)
+			logging.error("Failed moving to dead-leatter", e)
 			publish("", "%s-dl" % queue, s_body, conn)
 
 		ch.basic_ack(delivery_tag = method.delivery_tag)
 
- 	channel = get_channel(conn)
+	channel = get_channel(conn)
 	channel.basic_qos(prefetch_count=MQ_PRE_FETCH)
 	channel.basic_consume(_callback, queue=queue, no_ack=False)
 
-	print(" [*] Waiting for messages, queue '%s'. To exit press CTRL+C" % queue)
+	logging.info(" [*] Waiting for messages, queue '%s'. To exit press CTRL+C" % queue)
 	channel.start_consuming()

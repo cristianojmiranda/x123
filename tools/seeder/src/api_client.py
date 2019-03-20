@@ -9,3 +9,6 @@ def get_file(id):
 
 def delete_file(id):
 	return requests.delete("%s/storage/file/%s" % (API_URL, id))
+
+def k8s_bounce_app(app):
+	return requests.get("%s/k8s/bounce/%s" % (API_URL, app))

@@ -165,3 +165,40 @@ spec:
           requests:
             memory: 64Mi
             cpu: 0.1
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: default
+  name: bouncer-mqp
+  labels:
+    app: bouncer-mqp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bouncer-mqp
+  template:
+    metadata:
+      labels:
+        app: bouncer-mqp
+    spec:
+      containers:
+      - name: bouncer-mqp
+        image: my_seeder
+        imagePullPolicy: IfNotPresent
+        command: ["python3"]
+        args: ["bouncer_mqp.py"]
+        env:
+        - name: MQ_HOST
+          value: rabbitmq
+        - name: MQ_HOST
+          value: rabbitmq
+        resources:
+          limits:
+            memory: 128Mi
+            cpu: 0.2
+          requests:
+            memory: 64Mi
+            cpu: 0.1

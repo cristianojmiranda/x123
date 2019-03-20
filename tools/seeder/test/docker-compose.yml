@@ -100,3 +100,20 @@ services:
       - rabbitmq
       - consul
       - vault
+
+  bouncer:
+    image: my_seeder
+    command: >
+      sh -c "
+        while ! nc -z rabbitmq 15672; do
+          echo .;
+          sleep 5;
+        done;
+        echo xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx;
+        python3 /app/bouncer_mqp.py"
+    environment:
+      - MQ_HOST=rabbitmq
+      - API_URL=http://api:8000
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - rabbitmq

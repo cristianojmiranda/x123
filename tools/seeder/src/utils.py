@@ -28,3 +28,15 @@ def has_key(key, kv):
         if v is None:
             return False
     return True
+
+def get_key(key, kv):
+    keys = key.split('.')
+    last_key = keys[-1]
+    v = kv
+    for k in keys:
+        v = finditem(k, v)
+        if v is None:
+            return None
+        if v is not None and k == last_key:
+            return v
+    return None

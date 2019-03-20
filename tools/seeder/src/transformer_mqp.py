@@ -1,12 +1,19 @@
-import json, yaml, rabbitmq, utils
+import rabbitmq, utils
+import json, yaml, logging
+
 SPRING_PROFILE=utils.env("SPRING_PROFILE", "")
 
-conn = rabbitmq.get_connection()
-channel = conn.channel()
+# json with prefix/sufix by flavor
+PREFIX_BAG = utils.env("PREFIX_BAG", '''{ "spring": { "prefix": "spring/", "sufix": "/data"} }''')
+_prefix_bag = json.loads(PREFIX_BAG)
+logging.debug("prefix_bag=%s" % str(_prefix_bag))
 
-queue_name='seeder-transform'
+exchange = "seeder"
+queue_name = "seeder-transform"
+
+conn = rabbitmq.get_connection()
 rabbitmq.create_exchange("seeder", conn);
-rabbitmq.create_queue(queue_name, 'seeder', 'transform', conn)
+rabbitmq.create_queue(queue_name, exchange, 'transform', conn)
 
 '''
 Parse data by type
@@ -35,7 +42,7 @@ def filter(message):
 	return data if is_spring_valid_profile(data) else None
 
 def transform(message, data):
-	print("Transforming: message=", message, ",data=", data)
+	logging.info("Transforming: message=[%s] data=[%s]" % (message, data))
 
 	t_data = data
 	data_type = message['type']
@@ -48,37 +55,36 @@ def transform(message, data):
 	message['app'] = message['name']
 	message['data'] = t_data
 
+	# flavor spring?
 	if utils.has_key('spring.profiles', data):
-		spring_profile = data['spring']['profiles']
+		spring_profile = utils.get_key('spring.profiles', data)
 		message['name'] = "%s-%s" % (message['name'], spring_profile)
 
 	return message
 
+def compose_key(key, flavor):
+	if flavor in _prefix_bag:
+		pre = _prefix_bag[flavor]['prefix']
+		suf = _prefix_bag[flavor]['sufix']
+		return "%s%s%s" % (pre, key, suf)
+	return key
+
 def send_to_seed(message):
 	s_message = {
-				 	'key': message['name'],
+				 	'key': compose_key(message['name'], message['flavor']),
 				 	'value': message['data'],
 				 	'storage': message['storage'],
 				 	'app': message['app']
 				}
-	rabbitmq.publish('seeder', 'seed', s_message, conn)
+	rabbitmq.publish(exchange, 'seed', s_message, conn)
 
 def callback(ch, method, properties, body):
-	print(" [x] Received %r" % body)
-	s_body = body.decode("UTF-8")
-	message = json.loads(s_body)
-
+	message = json.loads(body)
 	data = filter(message)
 	if data is None:
-		print("Message discarted by filter")
+		logging.warn("Message discarted by filter")
 	else:
 		t_message = transform(message, data)
 		send_to_seed(t_message)
 
-	ch.basic_ack(delivery_tag = method.delivery_tag)
-
-channel.basic_qos(prefetch_count=1)
-channel.basic_consume(callback, queue=queue_name, no_ack=False)
-
-print(' [*] Waiting for messages. To exit press CTRL+C')
-channel.start_consuming()
+rabbitmq.consumer(queue_name, callback, conn)
