@@ -89,8 +89,7 @@ services:
           sleep 5;
         done;
         echo xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx;
-        python3 /app/seeder_mqp.py;
-      "
+        python3 /app/seeder_mqp.py;"
     environment:
       - MQ_HOST=rabbitmq
       - CONSUL_HOST=consul

@@ -29,7 +29,7 @@ def seed(ch, method, message):
 		ch.basic_ack(delivery_tag = method.delivery_tag)
 
 	elif storage == 'vault':
-		vault_client.put(app, key, value)
+		vault_client.put(key, value)
 		notify_seed_app(app)
 		ch.basic_ack(delivery_tag = method.delivery_tag)
 
