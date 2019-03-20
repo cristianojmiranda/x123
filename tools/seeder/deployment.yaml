@@ -6,7 +6,7 @@ metadata:
   labels:
     app: seeder-api
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: seeder-api
@@ -22,15 +22,10 @@ spec:
         env:
         - name: MQ_HOST
           value: rabbitmq
+        - name: PYTHONUNBUFFERED
+          value: '1'
         ports:
         - containerPort: 8000
-        resources:
-          limits:
-            memory: 256Mi
-            cpu: 0.2
-          requests:
-            memory: 64Mi
-            cpu: 0.1
         readinessProbe:
           httpGet:
             path: /health
@@ -88,13 +83,10 @@ spec:
         env:
         - name: MQ_HOST
           value: rabbitmq
-        resources:
-          limits:
-            memory: 128Mi
-            cpu: 0.2
-          requests:
-            memory: 64Mi
-            cpu: 0.1
+        - name: API_URL
+          value: http://seeder-api:8000
+        - name: PYTHONUNBUFFERED
+          value: '1'
 
 ---
 apiVersion: apps/v1
@@ -123,13 +115,8 @@ spec:
         env:
         - name: MQ_HOST
           value: rabbitmq
-        resources:
-          limits:
-            memory: 128Mi
-            cpu: 0.2
-          requests:
-            memory: 64Mi
-            cpu: 0.1
+        - name: PYTHONUNBUFFERED
+          value: '1'
 
 ---
 apiVersion: apps/v1
@@ -140,7 +127,7 @@ metadata:
   labels:
     app: seeder-mqp
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: seeder-mqp
@@ -158,13 +145,14 @@ spec:
         env:
         - name: MQ_HOST
           value: rabbitmq
-        resources:
-          limits:
-            memory: 128Mi
-            cpu: 0.2
-          requests:
-            memory: 64Mi
-            cpu: 0.1
+        - name: S_CONSUL_HOST
+          value: consul
+        - name: S_VAULT_HOST
+          value: vault
+        - name: S_VAULT_TOKEN
+          value: v5ulT
+        - name: PYTHONUNBUFFERED
+          value: '1'
 
 ---
 apiVersion: apps/v1
@@ -193,12 +181,7 @@ spec:
         env:
         - name: MQ_HOST
           value: rabbitmq
-        - name: MQ_HOST
-          value: rabbitmq
-        resources:
-          limits:
-            memory: 128Mi
-            cpu: 0.2
-          requests:
-            memory: 64Mi
-            cpu: 0.1
+        - name: API_URL
+          value: http://seeder-api:8000
+        - name: PYTHONUNBUFFERED
+          value: '1'

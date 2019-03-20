@@ -1,12 +1,12 @@
 import utils, hvac, logging
 
-VAULT_HOST = utils.env("VAULT_HOST", 'localhost')
-VAULT_SCHEMA = utils.env("VAULT_SCHEMA", 'http')
-VAULT_PORT = int(utils.env("VAULT_PORT", 8200))
-VAULT_TOKEN = utils.env("VAULT_TOKEN")
+S_VAULT_HOST = utils.env("S_VAULT_HOST", 'localhost')
+S_VAULT_SCHEMA = utils.env("S_VAULT_SCHEMA", 'http')
+S_VAULT_PORT = int(utils.env("S_VAULT_PORT", 8200))
+S_VAULT_TOKEN = utils.env("S_VAULT_TOKEN")
 
-vault_url = "%s://%s:%i" % (VAULT_SCHEMA, VAULT_HOST, VAULT_PORT)
-client = hvac.Client(url=vault_url, token=VAULT_TOKEN)
+vault_url = "%s://%s:%i" % (S_VAULT_SCHEMA, S_VAULT_HOST, S_VAULT_PORT)
+client = hvac.Client(url=vault_url, token=S_VAULT_TOKEN)
 
 def put(key, value):
 	logging.info("vault_put: [%s] => [%s]" % (key, value))

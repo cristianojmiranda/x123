@@ -92,9 +92,9 @@ services:
         python3 /app/seeder_mqp.py;"
     environment:
       - MQ_HOST=rabbitmq
-      - CONSUL_HOST=consul
-      - VAULT_HOST=vault
-      - VAULT_TOKEN=v5ulT
+      - S_CONSUL_HOST=consul
+      - S_VAULT_HOST=vault
+      - S_VAULT_TOKEN=v5ulT
       - PYTHONUNBUFFERED=1
     depends_on:
       - rabbitmq
