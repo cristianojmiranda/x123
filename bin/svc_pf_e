@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if [[ $# -lt 3 ]]; then
+  echo "Please inform env, service name and port to bind. eg, svc_pf_e ci sanic 8001:8000"
+  exit 1
+fi
+
+SVC=$(kk_svc_e | grep $2 | head -n 1 | awk '{print $1}')
+if [[ "$SVC" == "" ]]; then
+  echo "Service not found"
+else
+  echo "service=$SVC"
+  kke $1 port-forward "svc/$SVC" $3
+fi
