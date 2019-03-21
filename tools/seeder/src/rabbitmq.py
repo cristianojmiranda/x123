@@ -7,14 +7,19 @@ MQ_USER = utils.env("MQ_USER", "guest")
 MQ_PASS = utils.env("MQ_PASS", "guest")
 MQ_VHOST = utils.env("MQ_VHOST", "/")
 
-MQ_TTL_RETRY = int(utils.env("MQ_TTL_RETRY", 60000))
-MQ_MAX_RETRIES = int(utils.env("MQ_MAX_RETRIES", 3))
+MQ_TTL_RETRY = int(utils.env("MQ_TTL_RETRY", 30000)) # 30s
+MQ_TTL_LONG_RETRY = int(utils.env("MQ_TTL_LONG_RETRY", 10 * MQ_TTL_RETRY)) # 10x30s = 300s = 5min
+MQ_MAX_RETRIES = int(utils.env("MQ_MAX_RETRIES", 10)) # 5min retries
+MQ_MAX_LONG_RETRIES = int(utils.env("MQ_MAX_LONG_RETRIES", 10)) # + 50min long retries
 MQ_PRE_FETCH = int(utils.env("MQ_PRE_FETCH", 1))
 
 credentials = pika.PlainCredentials(MQ_USER, MQ_PASS)
 connection_params =pika.ConnectionParameters(MQ_HOST, MQ_PORT, MQ_VHOST, credentials)
 
 class RetryException(Exception):
+	pass
+
+class LongRetryException(Exception):
 	pass
 
 def get_connection():
@@ -40,6 +45,10 @@ def create_queue(name, exchange, routing_key, conn=None):
 	retry_args = { "x-message-ttl": MQ_TTL_RETRY, "x-dead-letter-exchange": exchange, "x-dead-letter-routing-key": routing_key }
 	channel.queue_declare(queue="%s-retry" % name, durable=True, arguments=retry_args)
 
+	# long retry queue
+	retry_args = { "x-message-ttl": MQ_TTL_LONG_RETRY, "x-dead-letter-exchange": exchange, "x-dead-letter-routing-key": routing_key }
+	channel.queue_declare(queue="%s-long-retry" % name, durable=True, arguments=retry_args)
+
 	# bind's
 	channel.queue_bind(exchange=exchange, queue=name, routing_key=routing_key)
 	channel.queue_bind(exchange=exchange, queue="%s-retry" % name, routing_key="%s-retry" % name)
@@ -52,6 +61,11 @@ def publish(exchange, routing, message, conn=None, headers=None):
 	props=pika.spec.BasicProperties(headers=headers)
 	channel.basic_publish(exchange=exchange, routing_key=routing, body=_body, properties=props)
 	logging.info("published")
+
+def send_to_retry(exception, properties=None):
+	if properties and properties.headers and 'long_retry_count' in properties.headers:
+		raise LongRetryException(exception)
+	raise RetryException(exception)
 
 def consumer(queue, callback, conn=None):
 
@@ -66,16 +80,27 @@ def consumer(queue, callback, conn=None):
 
 		except RetryException as r:
 			logging.error(r)
-
 			retry_count = 1
 			if properties.headers and 'retry_count' in properties.headers:
 				retry_count = int(properties.headers['retry_count']) + 1
 
 			if retry_count > MQ_MAX_RETRIES:
-				logging.warn("Exceeded retries!!! %i" % retry_count)
-				publish("", "%s-dl" % queue, s_body, conn)
+				logging.warning("Exceeded retries!!! %i" % retry_count)
+				publish("", "%s-long-retry" % queue, s_body, conn)
 			else:
 				publish("", "%s-retry" % queue, s_body, conn, {'retry_count': retry_count})
+
+		except LongRetryException as lr:
+			logging.error(lr)
+			retry_count = 1
+			if properties.headers and 'long_retry_count' in properties.headers:
+				retry_count = int(properties.headers['long_retry_count']) + 1
+
+			if retry_count > MQ_MAX_LONG_RETRIES:
+				logging.warning("Exceeded loooong retries!!! %i" % retry_count)
+				publish("", "%s-dl" % queue, s_body, conn)
+			else:
+				publish("", "%s-long-retry" % queue, s_body, conn, {'long_retry_count': retry_count})
 
 		except Exception as e:
 			logging.error("Failed moving to dead-leatter", e)

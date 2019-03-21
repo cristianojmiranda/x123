@@ -1,7 +1,9 @@
 import os, base64
 
 def env(name, default_value=None):
-    return os.environ[name] if name in os.environ else default_value
+    _val = os.environ[name] if name in os.environ else default_value
+    print("ENV %s => %s" % (name, str(_val)))
+    return _val
 
 def encode(data):
     return "%s" % base64.b64encode(str.encode(data)).decode("UTF-8")
@@ -14,12 +16,15 @@ def is_not_none(value):
 
 def finditem(key, obj):
     #print('fi', key, '->', obj)
-    if key in obj: return obj[key]
-    for k, v in obj.items():
-        if isinstance(v, dict):
-            item = finditem(key, v)
-            if item is not None:
-                return item
+    if isinstance(obj, dict):
+        if key in obj: return obj[key]
+        for k, v in obj.items():
+            if isinstance(v, dict):
+                item = finditem(key, v)
+                if item is not None:
+                    return item
+    else:
+        return None
 
 def has_key(key, kv):
     v = kv

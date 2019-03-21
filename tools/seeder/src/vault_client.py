@@ -1,4 +1,4 @@
-import utils, hvac, logging
+import utils, json, hvac, logging
 
 S_VAULT_HOST = utils.env("S_VAULT_HOST", 'localhost')
 S_VAULT_SCHEMA = utils.env("S_VAULT_SCHEMA", 'http')
@@ -10,4 +10,5 @@ client = hvac.Client(url=vault_url, token=S_VAULT_TOKEN)
 
 def put(key, value):
 	logging.info("vault_put: [%s] => [%s]" % (key, value))
-	client.secrets.kv.v2.create_or_update_secret(path=key, secret=dict(data=value))
+	secret = json.loads(value) if type(value) == str else value
+	client.secrets.kv.v2.create_or_update_secret(path=key, secret=secret)

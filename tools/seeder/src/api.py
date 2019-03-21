@@ -7,7 +7,11 @@ import os
 import fstore
 import rabbitmq, utils
 
-rabbitmq.create_exchange("seeder");
+exchange = utils.env('EXCHANGE', 'seeder')
+output_routing_key = utils.env('OUTPUT_RK', 'split')
+KUBE_BOUNCE_COMMAND = utils.env('KUBE_BOUNCE_COMMAND', '''kubectl set env deployment/%s --env="LAST_MANUAL_RESTART=$(date +%%s)"''')
+
+rabbitmq.create_exchange(exchange);
 app = Sanic()
 
 @app.route("/seed/<store>/<flavor>", methods=['POST'])
@@ -22,7 +26,7 @@ async def seed(request, store, flavor):
 				'flavor': flavor
 			  }
 	logger.info("send '%s' to be split" % str(message))
-	rabbitmq.publish("seeder", "split", message)
+	rabbitmq.publish(exchange, output_routing_key, message)
 	return json(message)
 
 @app.route("/storage/file/<id>", methods=['GET'])
@@ -42,9 +46,11 @@ async def health(request):
 @app.route("/k8s/bounce/<app>", methods=['GET'])
 async def get_file(request, app):
 	logger.info("Bouncing app %s" % app)
-	out = os.popen('''kubectl set env deployment/%s --env="LAST_MANUAL_RESTART=$(date +%%s)"''' % app)
+	#kubectl --insecure-skip-tls-verify  get pods
+	#cat ~/.kube/config (/root/.kube)
+	out = os.popen(KUBE_BOUNCE_COMMAND % app)
 	logger.debug("bounce output=%s" % out.read())
-	out.close()
+	logger.debug("bounce output=%s" % out.close())
 	return text("DONE")
 
 if __name__ == "__main__":
