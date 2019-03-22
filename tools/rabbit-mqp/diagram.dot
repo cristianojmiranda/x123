@@ -1,0 +1,43 @@
+digraph RabbitMqp {
+
+  subgraph cluster_0 {
+    label = "api_test";
+    style=filled;
+    color=gray61;
+		node [style=filled,color=white];
+
+    log;
+    rabbit_post;
+  }
+
+  subgraph cluster_1 {
+    label = "RabbitMq";
+    node [style=filled];
+    style = filled;
+    color = orange;
+
+    exchange -> queue [label="routing_key"];
+    retry -> queue;
+    long_retry -> queue;
+    dead_letter;
+  }
+
+  subgraph cluster_2 {
+    label = "rabbit_mqp";
+    node [style=filled, color=white, fontcolor=black];
+    style = filled;
+    color = cadetblue4;
+    border = 1;
+
+    consumer -> log [label="step 1"];
+    consumer -> retry [label="step 2a(step 1 failed)"];
+    consumer -> long_retry [label="step 2b(exceeded retries of step 1)"];
+    consumer -> dead_letter [label="step2c(exceeded long retries of step 1)"];
+    consumer -> exchange [label="step 2"];
+  }
+
+  user -> rabbit_post;
+  rabbit_post -> exchange[label="exchange=? / routing_key=?"];
+  queue -> consumer;
+
+}

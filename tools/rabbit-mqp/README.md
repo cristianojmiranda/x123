@@ -1,5 +1,6 @@
 # My-Rabbitmqp
 
+  ![diagram](diagram.png)
 
 ## Build
 
