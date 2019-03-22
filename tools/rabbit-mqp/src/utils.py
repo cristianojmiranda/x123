@@ -1,8 +1,8 @@
-import os, base64
+import logging, os, base64
 
 def env(name, default_value=None):
     _val = os.environ[name] if name in os.environ else default_value
-    print("ENV %s => %s" % (name, str(_val)))
+    logging.info("ENV %s => %s" % (name, str(_val)))
     return _val
 
 def encode(data):

@@ -84,9 +84,9 @@ def consumer(queue, callback, conn=None):
 			if properties.headers and 'retry_count' in properties.headers:
 				retry_count = int(properties.headers['retry_count']) + 1
 
-			if retry_count > MQ_MAX_RETRIES:
+			if retry_count >= MQ_MAX_RETRIES:
 				logging.warning("Exceeded retries!!! %i" % retry_count)
-				publish("", "%s-long-retry" % queue, s_body, conn)
+				publish("", "%s-long-retry" % queue, s_body, conn, {'long_retry_count': 1})
 			else:
 				publish("", "%s-retry" % queue, s_body, conn, {'retry_count': retry_count})
 
@@ -96,7 +96,7 @@ def consumer(queue, callback, conn=None):
 			if properties.headers and 'long_retry_count' in properties.headers:
 				retry_count = int(properties.headers['long_retry_count']) + 1
 
-			if retry_count > MQ_MAX_LONG_RETRIES:
+			if retry_count >= MQ_MAX_LONG_RETRIES:
 				logging.warning("Exceeded loooong retries!!! %i" % retry_count)
 				publish("", "%s-dl" % queue, s_body, conn)
 			else:

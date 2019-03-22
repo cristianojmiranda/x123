@@ -1,0 +1,67 @@
+version: '3'
+services:
+
+  rabbitmq:
+    image: rabbitmq:3.7.8-management-alpine
+    ports:
+      - 15672:15672
+
+  api_test:
+    image: my_rabbit_mqp
+    command: >
+      sh -c "
+        while ! nc -z rabbitmq 15672; do
+          echo .;
+          sleep 5;
+        done;
+        echo xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx;
+        python3 /app/api_test.py;"
+    environment:
+      - APP_WORKERS=4
+      - MQ_HOST=rabbitmq
+      - PYTHONUNBUFFERED=1
+    ports:
+      - 8000:8000
+    depends_on:
+      - rabbitmq
+
+  mqp_1:
+    image: my_rabbit_mqp
+    command: >
+      sh -c "
+        while ! nc -z rabbitmq 15672; do
+          echo .;
+          sleep 5;
+        done;
+        echo xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx;
+        python3 /app/generic_mqp.py"
+    environment:
+      - MQ_HOST=rabbitmq
+      - POST_URL=http://api_test:8000/log
+      - OUTPUT_RK=output
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - rabbitmq
+
+  mqp_2:
+    image: my_rabbit_mqp
+    command: >
+      sh -c "
+        while ! nc -z rabbitmq 15672; do
+          echo .;
+          sleep 5;
+        done;
+        echo xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx;
+        python3 /app/generic_mqp.py"
+    environment:
+      - MQ_HOST=rabbitmq
+      - MQ_TTL_LONG_RETRY=35000
+      - MQ_MAX_LONG_RETRIES=3
+      - MQ_MAX_RETRIES=3
+      - POST_URL=http://api_test:8000/failed/x
+      - QUEUE=end-of-line
+      - INPUT_RK=output
+      - OUTPUT_RK=nop
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - rabbitmq
