@@ -114,4 +114,13 @@ fi
 # intall terminator
 if ! type "terminator" > /dev/null; then
 	echo "Installing terminator..."
+	sudo apt-get install terminator
+fi
+
+
+# intall graphviz / dot
+if ! type "dot" > /dev/null; then
+	echo "Installing graphviz/dot..."
+	sudo apt-get install graphviz
+	dot -V
 fi

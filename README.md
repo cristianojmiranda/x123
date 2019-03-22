@@ -13,6 +13,20 @@
  > The shortcuts could be harmful for you production cluster, use it by your own risk.<br />
  > I recommend you to explore your `~/bin` folder after install or just check `bin` folder on this repo. The documentation could be behind of available shortcuts.<br />
 
+ It'll installed the following softwares if you don't have it:
+ * consul
+ * vault
+ * zsh
+ * k3s
+ * k9s
+ * kubectl
+ * atom
+ * dot
+ * curl
+ * python3.7
+ * telepresence
+ * terminator
+
 ## Scripts and Shortcuts
 
 ### k3s
@@ -73,3 +87,5 @@
  * [sanic](https://sanic.readthedocs.io/en/latest/)
  * [vertex](https://vertx.io/)
  * [pyYaml](https://pyyaml.org/wiki/PyYAMLDocumentation)
+ * [`dot -Tpng diagram.dot -o diagram.png`](https://graphviz.gitlab.io/)
+ * [make a graph](https://graphs.grevian.org/graph)
