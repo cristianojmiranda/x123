@@ -1,4 +1,5 @@
-FROM my_rabbit_mqp
+FROM rabbitmqp
+#FROM cristianojmiranda/rabbitmqp
 
 RUN pip3 install python-consul hvac
 

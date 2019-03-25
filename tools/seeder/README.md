@@ -4,6 +4,8 @@
 
 `file(s) > api > splitter > transform/filter > seed`
 
+ ![diagram](diagram.png)
+
 ## Build
 
 ```

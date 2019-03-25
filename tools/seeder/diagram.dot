@@ -1,0 +1,87 @@
+digraph seeder {
+
+  subgraph cluster_0 {
+    label="seeder-api"
+
+    "/seed/<store>/<flavor>";
+    "/storage/file/<id>";
+    "/k8s/bounce/<app>";
+  }
+
+  subgraph cluster_1 {
+    label="seeder-mqp"
+    "seeder-mqp";
+  }
+
+  subgraph cluster_2 {
+    label="splitter-mqp";
+    "splitter-mqp";
+  }
+
+
+  subgraph cluster_3 {
+    label="transformer-mqp";
+    "transformer-mqp";
+  }
+
+  subgraph cluster_4 {
+    label="rabbitmq";
+
+    "exchange" -> "queue"[label="routing_key"];
+    "retry" -> "queue";
+    "retry" -> "long_retry";
+    "queue" -> "retry";
+    "queue" -> "long_retry";
+    "long_retry" -> "queue";
+    "queue" -> "dead-letter";
+
+    "seeder" -> "exchange"[style=dashed];
+    "seeder" -> "seeder-split"[label="routing_key: split"];
+    "seeder" -> "seeder-transform"[label="routing_key: transform"];
+    "seeder" -> "seed"[label="routing_key: seed"];
+    "seeder" -> "restart-app"[label="routing_key: seeded"];
+
+  }
+
+  subgraph cluster_5 {
+    label="consul"
+    "consul/kv";
+  }
+
+  subgraph cluster_6 {
+    label="vault";
+    "vault/secret";
+  }
+
+  subgraph cluster_7 {
+    label="Steps";
+    "files" -> "split" -> "parse/filter/transform" -> "Seed" -> "vault";
+    "Seed" -> "consul"
+  }
+
+  subgraph cluster_8 {
+    label="bouncer-mqp";
+    "bouncer-mqp";
+  }
+
+  file -> "/seed/<store>/<flavor>"[label="POST upload"];
+
+  "/seed/<store>/<flavor>" -> "seeder"[label="routing_key: split"];
+  "seeder-split" -> "splitter-mqp";
+  "seed" -> "seeder-mqp";
+
+  "splitter-mqp" -> "/storage/file/<id>"[label=GET];
+  "splitter-mqp" -> "/storage/file/<id>"[label=DELETE];
+  "splitter-mqp" -> "seeder"[label="routing_key: transform"];
+
+  "seeder-transform" -> "transformer-mqp";
+  "transformer-mqp" -> "seeder"[label="routing_key: seed"];
+
+  "seeder-mqp" -> "consul/kv";
+  "seeder-mqp" -> "vault/secret";
+  "seeder-mqp" -> "seeder"[label="routing_key: seeded"];
+
+  "bouncer-mqp" -> "/k8s/bounce/<app>";
+  "restart-app" -> "bouncer-mqp";
+
+}

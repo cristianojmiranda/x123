@@ -21,7 +21,7 @@ services:
       - 15672:15672
 
   api:
-    image: my_seeder
+    image: seeder
     command: >
       sh -c "
         while ! nc -z rabbitmq 15672; do
@@ -39,7 +39,7 @@ services:
       - rabbitmq
 
   splitter:
-    image: my_seeder
+    image: seeder
     command: >
       sh -c "
         while ! nc -z rabbitmq 15672; do
@@ -56,7 +56,7 @@ services:
       - rabbitmq
 
   transformer:
-    image: my_seeder
+    image: seeder
     command: >
       sh -c "
         while ! nc -z rabbitmq 15672; do
@@ -73,7 +73,7 @@ services:
       - rabbitmq
 
   seeder:
-    image: my_seeder
+    image: seeder
     command: >
       sh -c "
         while ! nc -z rabbitmq 15672; do
@@ -102,7 +102,7 @@ services:
       - vault
 
   bouncer:
-    image: my_seeder
+    image: seeder
     command: >
       sh -c "
         while ! nc -z rabbitmq 15672; do

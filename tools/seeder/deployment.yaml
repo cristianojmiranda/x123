@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: seeder-api
-        image: my_seeder
+        image: seeder
         imagePullPolicy: IfNotPresent
         env:
         - name: MQ_HOST
@@ -76,7 +76,7 @@ spec:
     spec:
       containers:
       - name: seeder-splitter-mqp
-        image: my_seeder
+        image: seeder
         imagePullPolicy: IfNotPresent
         command: ["python3"]
         args: ["splitter_mqp.py"]
@@ -108,7 +108,7 @@ spec:
     spec:
       containers:
       - name: seeder-transformer-mqp
-        image: my_seeder
+        image: seeder
         imagePullPolicy: IfNotPresent
         command: ["python3"]
         args: ["transformer_mqp.py"]
@@ -138,7 +138,7 @@ spec:
     spec:
       containers:
       - name: seeder-mqp
-        image: my_seeder
+        image: seeder
         imagePullPolicy: IfNotPresent
         command: ["python3"]
         args: ["seeder_mqp.py"]
@@ -174,7 +174,7 @@ spec:
     spec:
       containers:
       - name: bouncer-mqp
-        image: my_seeder
+        image: seeder
         imagePullPolicy: IfNotPresent
         command: ["python3"]
         args: ["bouncer_mqp.py"]
