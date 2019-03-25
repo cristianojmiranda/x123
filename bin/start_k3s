@@ -30,6 +30,7 @@ if [[ $(docker ps | grep k3s | grep server -c) -eq 0 ]]; then
 	echo "Replacing ~/.kube/config..."
 	mkdir -p ~/.kube
 	cat $_WORKDIR/kubeconfig.yaml  > ~/.kube/config
+	kubectl create secret generic k3s-credential --from-file $_WORKDIR/kubeconfig.yaml
 	kube_info
 
 	# fix dns

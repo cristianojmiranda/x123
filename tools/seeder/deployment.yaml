@@ -22,6 +22,8 @@ spec:
         env:
         - name: MQ_HOST
           value: rabbitmq
+        - name: KUBE_BOUNCE_COMMAND
+          value: 'kubectl --insecure-skip-tls-verify set env deployment/%s --env="LAST_MANUAL_RESTART=$(date +%%s)"'
         - name: PYTHONUNBUFFERED
           value: '1'
         ports:
@@ -40,6 +42,14 @@ spec:
           initialDelaySeconds: 30
           timeoutSeconds: 3
           periodSeconds: 15
+        volumeMounts:
+        - name: kubeconfig-vol
+          mountPath: /root/config
+          subPath: kubeconfig.yaml
+      volumes:
+      - name: kubeconfig-vol
+        secret:
+          secretName: k3s-credential
 
 ---
 kind: Service
@@ -185,3 +195,30 @@ spec:
           value: http://seeder-api:8000
         - name: PYTHONUNBUFFERED
           value: '1'
+
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: file-seeder
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: file-seeder
+            image: seeder
+            args:
+            - /bin/sh
+            - -c
+            - ls /seeds/consul/* | xargs -I % echo "curl -i -XPOST -H \"Content-Type:multipart/form-data\" -F \"file=@/seeds/consul/%\" \"http://seeder-api:8000/seed/consul/spring\" | awk '{system($0)}"
+            volumeMounts:
+            - name: data-vol
+              mountPath: /seeds
+          restartPolicy: OnFailure
+          volumes:
+          - name: data-vol
+            hostPath:
+              path: /data/seeds

@@ -1,2 +1,3 @@
 #!/bin/bash
-docker exec -it $(docker ps | grep k3s | grep node | shuf | head -n 1 | awk '{print $1}') sh -c "crictl images"
+#docker exec -it $(docker ps | grep k3s | grep node | shuf | head -n 1 | awk '{print $1}') sh -c "crictl images"
+docker ps | grep k3s | grep node | awk '{print $1}' | xargs -I % docker exec % sh -c "echo %; crictl images; echo;"
