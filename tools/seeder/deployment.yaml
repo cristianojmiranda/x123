@@ -6,7 +6,7 @@ metadata:
   labels:
     app: seeder-api
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: seeder-api
@@ -44,7 +44,7 @@ spec:
           periodSeconds: 15
         volumeMounts:
         - name: kubeconfig-vol
-          mountPath: /root/config
+          mountPath: /root/.kube/config
           subPath: kubeconfig.yaml
       volumes:
       - name: kubeconfig-vol
@@ -137,7 +137,7 @@ metadata:
   labels:
     app: seeder-mqp
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: seeder-mqp
@@ -208,16 +208,30 @@ spec:
       template:
         spec:
           containers:
-          - name: file-seeder
+          # ------------------------------------------- consul ---
+          - name: file-seeder-consul
             image: seeder
+            imagePullPolicy: IfNotPresent
             args:
             - /bin/sh
             - -c
-            - ls /seeds/consul/* | xargs -I % echo "curl -i -XPOST -H \"Content-Type:multipart/form-data\" -F \"file=@/seeds/consul/%\" \"http://seeder-api:8000/seed/consul/spring\" | awk '{system($0)}"
+            - 'ls /seeds/consul/* | xargs -I % curl -iv -H "Content-Type: multipart/form-data" -F "file=@%" http://seeder-api:8000/seed/consul/spring'
             volumeMounts:
             - name: data-vol
               mountPath: /seeds
-          restartPolicy: OnFailure
+          # ------------------------------------------- vault ---
+          - name: file-seeder-vault
+            image: seeder
+            imagePullPolicy: IfNotPresent
+            args:
+            - /bin/sh
+            - -c
+            - 'ls /seeds/vault/* | xargs -I % curl -iv -H "Content-Type: multipart/form-data" -F "file=@%" http://seeder-api:8000/seed/vault/spring'
+            volumeMounts:
+            - name: data-vol
+              mountPath: /seeds
+          #restartPolicy: OnFailure
+          restartPolicy: Never
           volumes:
           - name: data-vol
             hostPath:
