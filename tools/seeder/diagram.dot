@@ -36,10 +36,10 @@ digraph seeder {
     "queue" -> "dead-letter";
 
     "seeder" -> "exchange"[style=dashed];
-    "seeder" -> "seeder-split"[label="routing_key: split"];
-    "seeder" -> "seeder-transform"[label="routing_key: transform"];
-    "seeder" -> "seed"[label="routing_key: seed"];
-    "seeder" -> "restart-app"[label="routing_key: seeded"];
+    "seeder" -> "seeder-split"[label="routing_key: split", color=blue];
+    "seeder" -> "seeder-transform"[label="routing_key: transform", color=orange];
+    "seeder" -> "seed"[label="routing_key: seed", color=green];
+    "seeder" -> "restart-app"[label="routing_key: seeded", color=red];
 
   }
 
@@ -55,8 +55,12 @@ digraph seeder {
 
   subgraph cluster_7 {
     label="Steps";
-    "files" -> "split" -> "parse/filter/transform" -> "Seed" -> "vault";
-    "Seed" -> "consul"
+    "files" -> "split"[color=blue];
+    "split" -> "parse/filter/transform"[color=orange];
+    "parse/filter/transform" -> "Seed"[color=green];
+    "Seed" -> "vault"[color=red]
+    "Seed" -> "consul"[color=red]
+    "Seed" -> "bounce-app"[color=yellow]
   }
 
   subgraph cluster_8 {
@@ -64,24 +68,24 @@ digraph seeder {
     "bouncer-mqp";
   }
 
-  file -> "/seed/<store>/<flavor>"[label="POST upload"];
+  file -> "/seed/<store>/<flavor>"[label="POST upload", color=blue];
 
-  "/seed/<store>/<flavor>" -> "seeder"[label="routing_key: split"];
-  "seeder-split" -> "splitter-mqp";
-  "seed" -> "seeder-mqp";
+  "/seed/<store>/<flavor>" -> "seeder"[label="routing_key: split", color=blue];
+  "seeder-split" -> "splitter-mqp"[color=orange];
+  "seed" -> "seeder-mqp"[color=red];
 
-  "splitter-mqp" -> "/storage/file/<id>"[label=GET];
-  "splitter-mqp" -> "/storage/file/<id>"[label=DELETE];
-  "splitter-mqp" -> "seeder"[label="routing_key: transform"];
+  "splitter-mqp" -> "/storage/file/<id>"[label=GET, color=orange];
+  "splitter-mqp" -> "/storage/file/<id>"[label=DELETE, color=orange];
+  "splitter-mqp" -> "seeder"[label="routing_key: transform", color=orange];
 
-  "seeder-transform" -> "transformer-mqp";
-  "transformer-mqp" -> "seeder"[label="routing_key: seed"];
+  "seeder-transform" -> "transformer-mqp"[color=green];
+  "transformer-mqp" -> "seeder"[label="routing_key: seed", color=green];
 
-  "seeder-mqp" -> "consul/kv";
-  "seeder-mqp" -> "vault/secret";
-  "seeder-mqp" -> "seeder"[label="routing_key: seeded"];
+  "seeder-mqp" -> "consul/kv"[color=red];
+  "seeder-mqp" -> "vault/secret"[color=red];
+  "seeder-mqp" -> "seeder"[label="routing_key: seeded", color=red];
 
-  "bouncer-mqp" -> "/k8s/bounce/<app>";
-  "restart-app" -> "bouncer-mqp";
+  "bouncer-mqp" -> "/k8s/bounce/<app>"[color=yellow];
+  "restart-app" -> "bouncer-mqp"[color=yellow];
 
 }

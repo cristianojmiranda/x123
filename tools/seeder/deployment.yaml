@@ -1,3 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fix-kubeconfig-script
+data:
+  entrypoint.sh: |-
+    #!/bin/sh
+    cat /tmp/kubeconfig.yaml
+    echo
+    cat /tmp/kubeconfig.yaml | sed 's@server:.*@server: https://'"$KUBERNETES_SERVICE_HOST"':'"$KUBERNETES_SERVICE_PORT_HTTPS"'@g' > /tmp/.kube/config
+    cat /tmp/.kube/config
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15,6 +28,24 @@ spec:
       labels:
         app: seeder-api
     spec:
+      initContainers:
+      - name: waiting-for-rabbitmq
+        image: busybox
+        command: ['sh', '-c', 'until nslookup rabbitmq; do echo waiting for rabbitmq; sleep 2; done;']
+      - name: prepare-kubeconfig
+        image: busybox
+        command:
+        - /bin/entrypoint.sh
+        volumeMounts:
+        - name: kubeconfig-vol
+          mountPath: /tmp/kubeconfig.yaml
+          subPath: kubeconfig.yaml
+        - name: k8s-vol
+          mountPath: /tmp/.kube
+        - name: kube-setup-vol
+          mountPath: /bin/entrypoint.sh
+          readOnly: true
+          subPath: entrypoint.sh
       containers:
       - name: seeder-api
         image: seeder
@@ -43,13 +74,18 @@ spec:
           timeoutSeconds: 3
           periodSeconds: 15
         volumeMounts:
-        - name: kubeconfig-vol
-          mountPath: /root/.kube/config
-          subPath: kubeconfig.yaml
+        - name: k8s-vol
+          mountPath: /root/.kube/
       volumes:
+      - name: k8s-vol
+        emptyDir: {}
       - name: kubeconfig-vol
         secret:
           secretName: k3s-credential
+      - name: kube-setup-vol
+        configMap:
+          defaultMode: 0700
+          name: fix-kubeconfig-script
 
 ---
 kind: Service
@@ -215,7 +251,7 @@ spec:
             args:
             - /bin/sh
             - -c
-            - 'ls /seeds/consul/* | xargs -I % curl -iv -H "Content-Type: multipart/form-data" -F "file=@%" http://seeder-api:8000/seed/consul/spring'
+            - 'ls /seeds/consul/* | xargs -I % curl -iv -H "Content-Type: multipart/form-data" -F "file=@%" http://seeder-api:8000/seed/consul/spring; rm -f /seeds/consul/*'
             volumeMounts:
             - name: data-vol
               mountPath: /seeds
@@ -226,7 +262,7 @@ spec:
             args:
             - /bin/sh
             - -c
-            - 'ls /seeds/vault/* | xargs -I % curl -iv -H "Content-Type: multipart/form-data" -F "file=@%" http://seeder-api:8000/seed/vault/spring'
+            - 'ls /seeds/vault/* | xargs -I % curl -iv -H "Content-Type: multipart/form-data" -F "file=@%" http://seeder-api:8000/seed/vault/spring; rm -f /seeds/vault/*'
             volumeMounts:
             - name: data-vol
               mountPath: /seeds

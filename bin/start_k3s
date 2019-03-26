@@ -37,13 +37,7 @@ if [[ $(docker ps | grep k3s | grep server -c) -eq 0 ]]; then
 		kk delete secret k3s-credential
 	fi
 
-	cat $_WORKDIR/kubeconfig.yaml  | sed -e 's/localhost/$KUBERNETES_SERVICE_HOST/g' > /tmp/kubeconfig-1.yaml
-	#cat /tmp/kubeconfig-1.yaml
-	cat /tmp/kubeconfig-1.yaml  | sed -e 's/:6443/:$KUBERNETES_SERVICE_PORT_HTTPS/g' > /tmp/kubeconfig.yaml
-	#cat /tmp/kubeconfig.yaml
-	kubectl create secret generic k3s-credential --from-file /tmp/kubeconfig.yaml
-	rm -f /tmp/kubeconfig-1.yaml
-	rm -f /tmp/kubeconfig.yaml
+	kk create secret generic k3s-credential --from-file $_WORKDIR/kubeconfig.yaml
 	#kk get secrets k3s-credential -o yaml | grep kubeconfig | awk '{print $2}' | base64 -d
 
 	# fix dns
