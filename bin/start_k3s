@@ -6,7 +6,7 @@ if [[ $(docker ps | grep k3s | grep server -c) -eq 0 ]]; then
 	echo "Starting k3s cluster...."
 	mkdir /tmp/data
 	mkdir /tmp/images
-	mkdir /tmp/volumes
+	#mkdir /tmp/volumes
 	mkdir /tmp/manifests
 
 	if [[ $# -eq 1 ]]; then

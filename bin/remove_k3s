@@ -2,7 +2,8 @@
 source env.sh
 
 echo "Stoping k3s cluster..."
-docker-compose --file=$_K3S_DOCKER_COMPOSE down
+docker-compose --file=$_K3S_DOCKER_COMPOSE stop
+docker-compose --file=$_K3S_DOCKER_COMPOSE rm -v
 
 echo
 echo "Removing kubeconfig..."
