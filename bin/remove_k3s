@@ -14,3 +14,4 @@ echo
 echo "Removing docker containers and volumes...."
 docker ps  -a | grep k3s | awk '{print $1}' | xargs docker rm
 docker volume ls | grep k3s | awk '{print $2}' | xargs docker volume rm
+docker volume ls | grep disk | awk '{print $2}' | xargs docker volume rm
