@@ -29,8 +29,9 @@ services:
     - K3S_CLUSTER_SECRET=kube
     volumes:
     - /tmp/images:/var/lib/rancher/k3s/agent/images
+    - disk1:/k3s/volumes
     - /tmp/data:/data
-    - /tmp/volumes/:/k3s/volumes
 
 volumes:
   k3s-server: {}
+  disk1: {}

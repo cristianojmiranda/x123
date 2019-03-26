@@ -22,23 +22,6 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8500
-        resources:
-          limits:
-            memory: 256Mi
-            cpu: 0.2
-          requests:
-            memory: 128Mi
-            cpu: 0.1
-        volumeMounts:
-        - mountPath: /consul/data
-          name: consul-vol
-      volumes:
-      - name: consul-vol
-        hostPath:
-          # directory location on host
-          path: /k3s/volumes/consul
-          # this field is optional
-          #type: Directory
 
 ---
 kind: Service
@@ -54,14 +37,3 @@ spec:
   - protocol: TCP
     port: 8500
     targetPort: 8500
-
-#---
-#apiVersion: policy/v1beta1
-#kind: PodDisruptionBudget
-#metadata:
-#  name: consul-pdb
-#spec:
-#  minAvailable: 1
-#  selector:
-#    matchLabels:
-#      app: consul
