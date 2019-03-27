@@ -4,10 +4,9 @@ source env.sh
 if [[ $(docker ps | grep k3s | grep server -c) -eq 0 ]]; then
 
 	echo "Starting k3s cluster...."
-	mkdir /tmp/data
-	mkdir /tmp/images
-	#mkdir /tmp/volumes
-	mkdir /tmp/manifests
+	mkdir -p $_K3S_DATA
+	mkdir -p $_K3S_IMAGES
+	mkdir -p $_K3S_MANIFESTS
 
 	if [[ $# -eq 1 ]]; then
 		docker-compose --file=$_K3S_DOCKER_COMPOSE up -d --scale node=$1
@@ -43,6 +42,9 @@ if [[ $(docker ps | grep k3s | grep server -c) -eq 0 ]]; then
 	# fix dns
 	kubectl apply -f $_RESOURCES/coredns.yaml
 
+	# install nfs
+	kubectl apply -f $_RESOURCES/nfs.yaml
+
 	sleep 30
 	resync_k3s_nodes
 
@@ -51,7 +53,9 @@ if [[ $(docker ps | grep k3s | grep server -c) -eq 0 ]]; then
 		echo '.'
 		sleep 10
 	done
-	ech "Done. We are ready!"
+
+	#helm init
+	echo "Done. We are ready!"
 	kk_nodes
 
 else
@@ -60,4 +64,5 @@ else
 fi
 
 #logs_k3s
-echo "Done. Up and running. If you wanna see the k3s logs run logs_k3s"
+wait_pods
+echo "Done. Up and running. If you want to see the k3s logs run k3s_logs"

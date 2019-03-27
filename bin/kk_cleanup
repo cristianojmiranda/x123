@@ -1,0 +1,13 @@
+#!/bin/bash
+kk_info
+source confirm "This script remove all deployments, statefullsets and daemonsets from default namespace. Do you want continue?"
+source confirm "Are you sure?"
+
+echo
+echo "Ok, it is up to You!"
+
+echo
+kk get deployments | grep -v NAME | awk '{print $1}' | xargs kk delete deployment
+kk get statefullsets | grep -v NAME | awk '{print $1}' | xargs kk delete statefullsets
+kk get daemonsets | grep -v NAME | awk '{print $1}' | xargs kk delete daemonset
+echo "Done"

@@ -1,0 +1,16 @@
+# https://github.com/helm/charts/tree/master/stable/redis-ha
+apiVersion: k3s.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: consul
+  namespace: kube-system
+spec:
+  chart: stable/redis-ha
+  targetNamespace: default
+  valuesContent: |-
+    image:
+      tag: 5.0.4-alpine
+    #replicas: 5
+    persistentVolume:
+      storageClass: storage-nfs
+      size: 100Mi

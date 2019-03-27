@@ -26,6 +26,7 @@
  * python3.7
  * telepresence
  * terminator
+ * helm
 
 ## Scripts and Shortcuts
 
@@ -39,7 +40,7 @@
  * **ssh_k3s** - ssh to cluster node. eg `ssh_k3s node_1`, `ssh_k3s node`, `ssh_k3s server`
  * **scale_k3s** - scale up or down the number of cluster nodes
  * **bounce_k3s_nodes** - restart all cluster nodes, usefull to bind new images from your local repository
- * **push_k3s_image** - push image from your local docker repo to k3s nodes (`docker save <image> -o /tmp/images/<image>.tar`)
+ * **push_k3s_image** - push image from your local docker repo to k3s nodes (`docker save <image> -o /tmp/k3s/images/<image>.tar`)
 
 
 ### kubernetes
@@ -89,3 +90,5 @@
  * [pyYaml](https://pyyaml.org/wiki/PyYAMLDocumentation)
  * [`dot -Tpng diagram.dot -o diagram.png`](https://graphviz.gitlab.io/)
  * [make a graph](https://graphs.grevian.org/graph)
+ * [helm](https://helm.sh/)
+ * [helmChart's](https://github.com/helm/charts/tree/master/stable)

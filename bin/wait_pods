@@ -1,6 +1,5 @@
 #!/bin/bash
-while [[ $(kk_pods  | grep 0/1 -c) -ne 0 ]]; do
-  #kk_pods
+while [[ $(kk_pods | grep -v Completed | grep 0/1 -c) -ne 0 ]]; do
   kk_unready_pods
   echo
   sleep 15

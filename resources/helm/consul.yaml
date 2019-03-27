@@ -1,0 +1,14 @@
+# https://github.com/helm/charts/tree/master/stable/consul
+apiVersion: k3s.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: consul
+  namespace: kube-system
+spec:
+  chart: stable/consul
+  targetNamespace: default
+  valuesContent: |-
+    ImageTag: 1.4.4
+    Replicas: 5
+    StorageClass: storage-nfs
+    Storage: 100Mi

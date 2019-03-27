@@ -2,7 +2,7 @@
 source env.sh
 
 if [[ $# -eq 0 ]] ; then
-	echo "Inform resource name. Like: deploy_k8s <resource>"
+	echo "Inform resource name. Like: deploy_resource <resource>"
 	echo "resources available:"
 	ls -l $_RESOURCES | grep yaml | grep -v compose | awk '{print $9}'
 fi

@@ -124,3 +124,12 @@ if ! type "dot" > /dev/null; then
 	sudo apt-get install graphviz
 	dot -V
 fi
+
+# intall helm
+if ! type "helm" > /dev/null; then
+	echo "Installing helm..."
+	wget https://storage.googleapis.com/kubernetes-helm/helm-v2.13.1-linux-amd64.tar.gz -O helm.tar.gz
+	tar -xvzf helm.tar.gz
+	sudo mv linux-amd64/helm /usr/local/bin/helm
+	helm -h
+fi
