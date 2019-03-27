@@ -133,3 +133,9 @@ if ! type "helm" > /dev/null; then
 	sudo mv linux-amd64/helm /usr/local/bin/helm
 	helm -h
 fi
+
+# intall redis-cli
+if ! type "redis-cli" > /dev/null; then
+	echo "Installing redis-cli..."
+  sudo apt-get install redis-tools
+fi

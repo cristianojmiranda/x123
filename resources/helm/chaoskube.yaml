@@ -1,0 +1,16 @@
+# https://github.com/helm/charts/tree/master/stable/chaoskube
+# https://github.com/linki/chaoskube
+apiVersion: k3s.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: chaoskube
+  namespace: kube-system
+spec:
+  chart: stable/chaoskube
+  targetNamespace: default
+  valuesContent: |-
+    imageTag: latest
+    replicas: 1
+    interval: 2m
+    rbac:
+      create: true

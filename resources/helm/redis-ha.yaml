@@ -2,12 +2,13 @@
 apiVersion: k3s.cattle.io/v1
 kind: HelmChart
 metadata:
-  name: consul
+  name: redis
   namespace: kube-system
 spec:
   chart: stable/redis-ha
   targetNamespace: default
   valuesContent: |-
+    #fullname: redis
     image:
       tag: 5.0.4-alpine
     #replicas: 5

@@ -1,0 +1,20 @@
+# https://medium.com/devopslinks/deploy-jenkins-helm-chart-on-k3s-running-on-macbook-484bb7ba588f
+# https://github.com/helm/charts/tree/master/stable/jenkins
+apiVersion: k3s.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: jenkins
+  namespace: kube-system
+spec:
+  chart: stable/jenkins
+  targetNamespace: default
+  valuesContent: |-
+    Master:
+      UseSecurity: false
+      AdminUser: jenkins
+      AdminPassword: jenkins
+    Persistence:
+      StorageClass: storage-nfs
+      Size: 3Gi
+    rbac:
+      install: true
