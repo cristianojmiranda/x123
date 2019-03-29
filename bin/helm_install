@@ -1,0 +1,20 @@
+#!/bin/bash
+source env.sh
+
+if [[ $# -eq 0 ]] ; then
+	echo "Inform resource name. Like: helm_deploy <resource>"
+	echo "resources available:"
+	ls -l $_HELM_RESOURCES | grep yaml | grep -v compose | awk '{print $9}'
+fi
+
+if [[ ! -e $_HELM_RESOURCES/$1.yaml ]]; then
+	echo "resource not found"
+	exit 1
+fi
+
+kk_info
+
+cat $_HELM_RESOURCES/$1.yaml
+source confirm
+
+cp $_HELM_RESOURCES/$1.yaml $_K3S_MANIFESTS/$1.yaml

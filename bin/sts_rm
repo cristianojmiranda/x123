@@ -1,0 +1,4 @@
+#!/bin/bash
+kk_info
+source confirm
+kk delete sts/$1

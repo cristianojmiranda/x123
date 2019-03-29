@@ -27,6 +27,7 @@
  * telepresence
  * terminator
  * helm
+ * redis-cli
 
 ## Scripts and Shortcuts
 
@@ -41,7 +42,12 @@
  * **scale_k3s** - scale up or down the number of cluster nodes
  * **bounce_k3s_nodes** - restart all cluster nodes, usefull to bind new images from your local repository
  * **push_k3s_image** - push image from your local docker repo to k3s nodes (`docker save <image> -o /tmp/k3s/images/<image>.tar`)
+ * **deploy_resource** - install basic non-HA resource on k3s, like `deploy_resource vault`
+ * **helm_deploy** - install helm chart resources on k3s(generally HA resources), example: `helm_deploy consul,jenkins,redis-ha`
 
+#### HelmChart's
+
+#### Storage, PV, Nfs
 
 ### kubernetes
 

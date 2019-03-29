@@ -1,8 +1,8 @@
 #!/bin/bash
-if [[ $# -eq 1 ]]; the
+if [[ $# -eq 1 ]]; then
   kk describe $1
 fi
 
-if [[ $# -eq 2 ]]; the
+if [[ $# -eq 2 ]]; then
   kk -n $1 describe $2
 fi

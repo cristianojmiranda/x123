@@ -1,0 +1,6 @@
+#!/bin/bash
+kk_info
+source confirm
+
+kk_pvc | grep -v NAME | awk '{print  $1}' | xargs kk delete pv
+kk_pv | grep -v NAME | awk '{print  $1}' | xargs kk delete pvc

@@ -1,0 +1,16 @@
+# https://github.com/helm/charts/tree/master/stable/nfs-client-provisioner
+apiVersion: k3s.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: nfs-client-provisioner
+  namespace: kube-system
+spec:
+  chart: stable/nfs-client-provisioner
+  targetNamespace: default
+  valuesContent: |-
+    nfs:
+      #server: nfs-server
+      server: 172.24.0.2
+      path: /k3s/volumes
+    storageClass:
+      defaultClass: true

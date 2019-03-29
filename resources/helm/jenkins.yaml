@@ -14,7 +14,7 @@ spec:
       AdminUser: jenkins
       AdminPassword: jenkins
     Persistence:
-      StorageClass: storage-nfs
+      StorageClass: local-path
       Size: 3Gi
     rbac:
       install: true

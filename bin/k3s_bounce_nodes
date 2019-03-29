@@ -1,0 +1,24 @@
+#!/bin/bash
+source env.sh
+
+echo "Bounce the all k3s nodes"
+#docker ps | grep k3s | grep node | awk '{print $1}'
+#source confirm
+#docker ps | grep k3s | grep node | awk '{print $1}' | xargs docker restart
+
+CLUSTER_SIZE=$(docker ps | grep k3s | grep node -c)
+docker ps | grep k3s | grep node | awk '{print $1}' > $_K3S_TMP/.k3s_nodes
+cat $_K3S_TMP/.k3s_nodes
+
+# double the cluster size
+NEW_CLUSTER_SIZE=$((2 * CLUSTER_SIZE))
+scale_k3s $NEW_CLUSTER_SIZE
+
+echo "Draining old nodes..."
+cat $_K3S_TMP/.k3s_nodes | xargs -I % kk drain %
+cat $_K3S_TMP/.k3s_nodes | xargs kk delete node
+cat $_K3S_TMP/.k3s_nodes | xargs docker stop
+cat $_K3S_TMP/.k3s_nodes | xargs docker rm
+rm -f $_K3S_TMP/.k3s_nodes
+wait_pods
+echo "Done"

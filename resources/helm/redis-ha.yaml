@@ -13,5 +13,5 @@ spec:
       tag: 5.0.4-alpine
     #replicas: 5
     persistentVolume:
-      storageClass: storage-nfs
+      storageClass: local-path
       size: 100Mi

@@ -42,7 +42,7 @@ spec:
       name: www
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: "storage-nfs"
+      #storageClassName: "storage-nfs"
       resources:
         requests:
-          storage: 1Gi
+          storage: 100Mi

@@ -1,0 +1,3 @@
+#!/bin/bash
+stop_k3s
+start_k3s

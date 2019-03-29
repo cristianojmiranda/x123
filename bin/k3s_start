@@ -1,0 +1,72 @@
+#!/bin/bash
+source env.sh
+
+if [[ $(docker ps | grep k3s | grep server -c) -eq 0 ]]; then
+
+	echo "Starting k3s cluster...."
+	mkdir -p $_K3S_DATA
+	mkdir -p $_K3S_IMAGES
+	mkdir -p $_K3S_MANIFESTS
+
+	if [[ $# -eq 1 ]]; then
+		docker-compose --file=$_K3S_DOCKER_COMPOSE up -d --scale node=$1
+	else
+
+		if [[ -e $_WORKDIR/k3s_nodes ]]; then
+			docker-compose --file=$_K3S_DOCKER_COMPOSE up -d --scale node=$(cat $_WORKDIR/k3s_nodes)
+		else
+			docker-compose --file=$_K3S_DOCKER_COMPOSE up -d
+		fi
+
+	fi
+
+	echo "Waiting cluster to be ready..."
+	while [[ ! -f $_WORKDIR/kubeconfig.yaml ]]; do
+		echo '.'
+		sleep 5
+	done
+
+	echo "Replacing ~/.kube/config..."
+	mkdir -p ~/.kube
+	cat $_WORKDIR/kubeconfig.yaml  > ~/.kube/config
+	kk_info
+
+  # prepare k3s-credential secret
+	if [[ $(kk get secrets | grep k3s-credential -c)  -ne 0 ]]; then
+		kk delete secret k3s-credential
+	fi
+
+	kk create secret generic k3s-credential --from-file $_WORKDIR/kubeconfig.yaml
+	#kk get secrets k3s-credential -o yaml | grep kubeconfig | awk '{print $2}' | base64 -d
+
+	# fix dns
+	#kubectl apply -f $_RESOURCES/coredns.yaml
+
+	# install nfs
+	kubectl apply -f $_RESOURCES/nfs.yaml
+	#kk apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/master/deploy/local-path-storage.yaml
+	#kk apply -f $_RESOURCES/local-storage.yaml
+	#cp $_HELM_RESOURCES/nfs-client-provisioner.yaml $_K3S_MANIFESTS/nfs-client-provisioner.yaml
+	#cp $_HELM_RESOURCES/nfs-server-provisioner.yaml $_K3S_MANIFESTS/nfs-server-provisioner.yaml
+
+	sleep 30
+	resync_k3s_nodes
+
+	echo "Waiting cluster nodes to be ready(Hold tight it can take some minutes)..."
+	while [[ $(kk_nodes | grep -v NotReady | grep Ready -c) -eq 0 ]]; do
+		echo '.'
+		sleep 10
+	done
+
+	#helm init
+	echo "Done. We are ready!"
+	kk_nodes
+
+else
+	echo "Cluster already have been started"
+	kk_info
+fi
+
+#logs_k3s
+wait_pods
+echo "Done. Up and running. If you want to see the k3s logs run k3s_logs"

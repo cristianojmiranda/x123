@@ -1,0 +1,3 @@
+#!/bin/bash
+kk_info
+kk_bounce statefulset/$1

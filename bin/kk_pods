@@ -1,2 +1,2 @@
 #!/bin/bash
-kk get pods -o wide
+kk get pods -o wide $@

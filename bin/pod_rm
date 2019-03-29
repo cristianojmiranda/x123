@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "removing pods"
-kube_info
+kk_info
 pod_ls $1
 
 source confirm
