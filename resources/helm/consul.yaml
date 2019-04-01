@@ -9,7 +9,7 @@ spec:
   targetNamespace: default
   valuesContent: |-
     ImageTag: 1.4.4
-    Replicas: 3
-    #StorageClass: local-path
-    Storage: 100Mi
-    affinity: {}
+    Replicas: 5
+    Storage: 50Mi
+    maxUnavailable: 0
+    #affinity: {}

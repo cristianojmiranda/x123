@@ -1,9 +1,8 @@
 #!/bin/bash
 source env.sh
 
-# stoping nfs provider
-#kk scale deployment/nfs-provisioner --replicas=0
-#docker ps | grep k3s | grep node | awk '{print $1}' | xargs -I % docker exec % umount -fd $(mount | grep /k3s/volumes | awk '{print $1}')
-#kubectl delete -f $_RESOURCES/nfs.yaml
+kk_zero_replicas
+sleep 15
 
-docker-compose --file=$_K3S_DOCKER_COMPOSE down
+echo "Stoping k3s cluster..."
+docker-compose --file=$_K3S_DOCKER_COMPOSE stop

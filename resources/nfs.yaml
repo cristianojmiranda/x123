@@ -1,5 +1,7 @@
 # https://github.com/kubernetes-incubator/external-storage/tree/master/nfs
 # Nfs volume provider. Use storageClass storage-nfs
+
+# Working but we have an issue with cluster stop and cluster remove (it stuck)
 #==========================================================================
 apiVersion: v1
 kind: ServiceAccount

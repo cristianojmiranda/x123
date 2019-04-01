@@ -37,17 +37,10 @@ if [[ $(docker ps | grep k3s | grep server -c) -eq 0 ]]; then
 	fi
 
 	kk create secret generic k3s-credential --from-file $_WORKDIR/kubeconfig.yaml
-	#kk get secrets k3s-credential -o yaml | grep kubeconfig | awk '{print $2}' | base64 -d
 
-	# fix dns
-	#kubectl apply -f $_RESOURCES/coredns.yaml
-
-	# install nfs
-	kubectl apply -f $_RESOURCES/nfs.yaml
-	#kk apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/master/deploy/local-path-storage.yaml
-	#kk apply -f $_RESOURCES/local-storage.yaml
-	#cp $_HELM_RESOURCES/nfs-client-provisioner.yaml $_K3S_MANIFESTS/nfs-client-provisioner.yaml
-	#cp $_HELM_RESOURCES/nfs-server-provisioner.yaml $_K3S_MANIFESTS/nfs-server-provisioner.yaml
+	# install pvs
+	#kk apply -f $_RESOURCES/pvs.yaml
+	kk apply -f $_RESOURCES/nfs.yaml
 
 	sleep 30
 	resync_k3s_nodes
@@ -58,7 +51,6 @@ if [[ $(docker ps | grep k3s | grep server -c) -eq 0 ]]; then
 		sleep 10
 	done
 
-	#helm init
 	echo "Done. We are ready!"
 	kk_nodes
 
@@ -68,5 +60,8 @@ else
 fi
 
 #logs_k3s
+kk_snap_load_replicas
 wait_pods
 echo "Done. Up and running. If you want to see the k3s logs run k3s_logs"
+sleep 5
+k9s

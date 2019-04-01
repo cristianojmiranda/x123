@@ -1,0 +1,298 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: local-pv1
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 100Mi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /k3s/volumes/disk1"
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: local-pv2
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 100Mi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /k3s/volumes/disk2"
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: local-pv3
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 100Mi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /k3s/volumes/disk3"
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: local-pv4
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 100Mi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /k3s/volumes/disk4"
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: local-pv5
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 100Mi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /k3s/volumes/disk5"
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: local-pv6
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 250Mi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /k3s/volumes/disk6"
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: local-pv7
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 250Mi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /k3s/volumes/disk7"
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: local-pv8
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 250Mi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /k3s/volumes/disk8"
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: local-pv9
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 250Mi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /k3s/volumes/disk9"
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: local-pv10
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 250Mi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /k3s/volumes/disk10"
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: local-pv11
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 500Mi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /k3s/volumes/disk11"
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: local-pv12
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 500Mi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /k3s/volumes/disk12"
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: local-pv13
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 500Mi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /k3s/volumes/disk13"
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: local-pv14
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 500Mi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /k3s/volumes/disk14"
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: local-pv15
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 500Mi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /k3s/volumes/disk15"
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: local-pv16
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /k3s/volumes/disk16"
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: local-pv17
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /k3s/volumes/disk17"
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: local-pv18
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /k3s/volumes/disk18"
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: local-pv19
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /k3s/volumes/disk19"
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: local-pv20
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /k3s/volumes/disk20"
