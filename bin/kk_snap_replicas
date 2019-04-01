@@ -1,6 +1,6 @@
 #!/bin/bash
 source env.sh
 S_FILE=$_WORKDIR/rsnap
-kk get sts -o json | jq -r '.items[] | .spec | "sts/\(.template.metadata.name) \(.replicas)"' > $S_FILE
+kk get sts -o json | jq -r '.items[] |  "sts/\(.metadata.name) \(.spec.replicas)"' > $S_FILE
 kk get deploy -o json | jq -r '.items[] | "deploy/\(.metadata.name) \(.spec.replicas)"' >> $S_FILE
 cat $S_FILE
