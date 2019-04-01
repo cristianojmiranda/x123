@@ -1,0 +1,4 @@
+#!/bin/bash
+#pod_ls $1 | shuf | head -n 1 | awk '{print $1}'
+POD=$(pod_get $1)
+kk describe po $POD

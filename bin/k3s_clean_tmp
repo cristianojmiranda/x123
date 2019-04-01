@@ -1,0 +1,4 @@
+#!/bin/bash
+source env.sh
+source confirm "Do you want to cleanup the temp files?"
+sudo rm -rf $_K3S_TMP

@@ -10,11 +10,10 @@ spec:
   targetNamespace: default
   valuesContent: |-
     Master:
-      UseSecurity: false
+      UseSecurity: true
       AdminUser: jenkins
       AdminPassword: jenkins
     Persistence:
-      StorageClass: storage-nfs
-      Size: 3Gi
+      Size: 1Gi
     rbac:
       install: true

@@ -1,13 +1,18 @@
 #!/bin/bash
 kk_info
-source confirm "This script remove all deployments, statefullsets and daemonsets from default namespace. Do you want continue?"
+echo
+echo
+source confirm "Hey! You are pretty close to remove all deployments, statefulsets and daemonsets from default namespace. Do you want to continue?"
 source confirm "Are you sure?"
+source confirm "REALLY?"
 
 echo
-echo "Ok, it is up to You!"
+echo "Ok, It is up to You!"
 
 echo
 kk get deployments | grep -v NAME | awk '{print $1}' | xargs kk delete deployment
-kk get statefullsets | grep -v NAME | awk '{print $1}' | xargs kk delete statefullsets
+kk get statefulsets | grep -v NAME | awk '{print $1}' | xargs kk delete statefulsets
 kk get daemonsets | grep -v NAME | awk '{print $1}' | xargs kk delete daemonset
 echo "Done"
+
+# all_pods  | grep kube | awk '{print $2}' | grep - | xargs kkn kube-system delete pod

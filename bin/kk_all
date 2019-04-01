@@ -1,0 +1,3 @@
+#!/bin/bash
+kk_info
+kk get all --all-namespaces $@

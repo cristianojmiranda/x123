@@ -12,7 +12,7 @@ if [[ ! -e $_HELM_RESOURCES/$1.yaml ]]; then
 	exit 1
 fi
 
-kube_info
+kk_info
 
 cat $_HELM_RESOURCES/$1.yaml
 source confirm

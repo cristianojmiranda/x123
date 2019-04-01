@@ -13,6 +13,12 @@ cp ./bin/* ~/bin
 
 cd /tmp
 
+# intall jq
+if ! type "jq" > /dev/null; then
+	echo "Installing jq..."
+	sudo apt-get install jq
+fi
+
 # intall curl
 if ! type "curl" > /dev/null; then
 	echo "Installing curl..."

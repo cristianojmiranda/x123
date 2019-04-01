@@ -29,7 +29,7 @@ if [[ $(docker ps | grep k3s | grep server -c) -eq 0 ]]; then
 	echo "Replacing ~/.kube/config..."
 	mkdir -p ~/.kube
 	cat $_WORKDIR/kubeconfig.yaml  > ~/.kube/config
-	kube_info
+	kk_info
 
   # prepare k3s-credential secret
 	if [[ $(kk get secrets | grep k3s-credential -c)  -ne 0 ]]; then
@@ -37,13 +37,10 @@ if [[ $(docker ps | grep k3s | grep server -c) -eq 0 ]]; then
 	fi
 
 	kk create secret generic k3s-credential --from-file $_WORKDIR/kubeconfig.yaml
-	#kk get secrets k3s-credential -o yaml | grep kubeconfig | awk '{print $2}' | base64 -d
 
-	# fix dns
-	kubectl apply -f $_RESOURCES/coredns.yaml
-
-	# install nfs
-	kubectl apply -f $_RESOURCES/nfs.yaml
+	# install pvs
+	#kk apply -f $_RESOURCES/pvs.yaml
+	kk apply -f $_RESOURCES/nfs.yaml
 
 	sleep 30
 	resync_k3s_nodes
@@ -54,7 +51,6 @@ if [[ $(docker ps | grep k3s | grep server -c) -eq 0 ]]; then
 		sleep 10
 	done
 
-	#helm init
 	echo "Done. We are ready!"
 	kk_nodes
 
@@ -64,5 +60,8 @@ else
 fi
 
 #logs_k3s
+kk_snap_load_replicas
 wait_pods
 echo "Done. Up and running. If you want to see the k3s logs run k3s_logs"
+sleep 5
+k9s

@@ -27,21 +27,25 @@
  * telepresence
  * terminator
  * helm
+ * redis-cli
 
 ## Scripts and Shortcuts
 
 ### k3s
 
  Script tools to work easily with k3s cluster locally
- * **start_k3s** - start a local cluster running inside docker (keep your machine clean from containerds, **your ~/.kube/config will be replaced**)
- * **stop_k3s** - stop the k3s cluster
- * **remove_k3s** - remove the cluster
- * **resync_k3s_nodes** - sync cluster nodes with docker containers
- * **ssh_k3s** - ssh to cluster node. eg `ssh_k3s node_1`, `ssh_k3s node`, `ssh_k3s server`
- * **scale_k3s** - scale up or down the number of cluster nodes
- * **bounce_k3s_nodes** - restart all cluster nodes, usefull to bind new images from your local repository
- * **push_k3s_image** - push image from your local docker repo to k3s nodes (`docker save <image> -o /tmp/k3s/images/<image>.tar`)
+ * **k3s_start** - start a local cluster running inside docker (keep your machine clean from containerds, **your ~/.kube/config will be replaced**)
+ * **k3s_stop** - stop the k3s cluster
+ * **k3s_remove** - remove the cluster
+ * **k3s_resync_nodes** - sync cluster nodes with docker containers
+ * **k3s_ssh** - ssh to cluster node. eg `ssh_k3s node_1`, `ssh_k3s node`, `ssh_k3s server`
+ * **k3s_scale** - scale up or down the number of cluster nodes
+ * **k3s_bounce_nodes** - restart all cluster nodes, usefull to bind new images from your local repository
+ * **k3s_push_image** - push image from your local docker repo to k3s nodes (`docker save <image> -o /tmp/k3s/images/<image>.tar`)
+ * **resource_install** - install basic non-HA resource on k3s, like `deploy_resource vault`
+ * **helm_install** - install helm chart resources on k3s(generally HA resources), example: `helm_deploy consul,jenkins,redis-ha`
 
+#### HelmChart's
 
 ### kubernetes
 

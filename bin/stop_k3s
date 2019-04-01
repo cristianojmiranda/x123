@@ -1,3 +1,0 @@
-#!/bin/bash
-source env.sh
-docker-compose --file=$_K3S_DOCKER_COMPOSE down

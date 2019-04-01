@@ -1,0 +1,6 @@
+#!/bin/bash
+source env.sh
+
+if [[ -e $_WORKDIR/rsnap ]]; then
+  cat $_WORKDIR/rsnap | awk '{printf "kk scale %s --replicas=%s\n",$1, $2}' | awk '{system($0)}'
+fi

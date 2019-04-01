@@ -1,0 +1,8 @@
+#!/bin/bash
+source env.sh
+
+k3s_stop
+docker-compose --file=$_K3S_DOCKER_COMPOSE rm -v
+
+k3s_clean
+k3s_clean_tmp

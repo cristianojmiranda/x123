@@ -1,5 +1,5 @@
 #!/bin/bash
-kube_info
+kk_info
 POD=$(pod_get_run $1)
 echo "pod=$POD"
 

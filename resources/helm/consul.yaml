@@ -10,5 +10,6 @@ spec:
   valuesContent: |-
     ImageTag: 1.4.4
     Replicas: 5
-    StorageClass: storage-nfs
-    Storage: 100Mi
+    Storage: 50Mi
+    maxUnavailable: 0
+    #affinity: {}

@@ -1,0 +1,6 @@
+#!/bin/bash
+kk_info
+POD=$(pod_get_n $1 $2)
+echo "$POD"
+
+kkn $1 logs -f $POD

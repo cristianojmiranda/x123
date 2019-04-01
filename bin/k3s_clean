@@ -1,10 +1,6 @@
 #!/bin/bash
 source env.sh
 
-echo "Stoping k3s cluster..."
-docker-compose --file=$_K3S_DOCKER_COMPOSE stop
-docker-compose --file=$_K3S_DOCKER_COMPOSE rm -v
-
 echo
 echo "Removing kubeconfig..."
 rm -f $_WORKDIR/kubeconfig.yaml
@@ -16,6 +12,3 @@ docker ps  -a | grep k3s | awk '{print $1}' | xargs docker stop
 docker ps  -a | grep k3s | awk '{print $1}' | xargs docker rm
 docker volume ls | grep k3s | awk '{print $2}' | xargs docker volume rm
 docker volume ls | grep disk | awk '{print $2}' | xargs docker volume rm
-
-source confirm "Do you want to cleanup the temp files?"
-sudo rm -rf $_K3S_TMP

@@ -1,0 +1,8 @@
+#!/bin/bash
+source env.sh
+
+kk_zero_replicas
+sleep 15
+
+echo "Stoping k3s cluster..."
+docker-compose --file=$_K3S_DOCKER_COMPOSE stop

@@ -1,6 +1,0 @@
-#!/bin/bash
-kk get nodes
-echo
-docker ps | grep k3s
-echo
-kk cluster-info
