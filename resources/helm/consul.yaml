@@ -10,6 +10,6 @@ spec:
   valuesContent: |-
     ImageTag: 1.4.4
     Replicas: 5
-    Storage: 50Mi
-    maxUnavailable: 0
+    Storage: 100Mi
+    maxUnavailable: 3
     #affinity: {}

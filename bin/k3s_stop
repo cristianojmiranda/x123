@@ -1,6 +1,7 @@
 #!/bin/bash
 source env.sh
 
+# prepare to stop
 kk_zero_replicas
 sleep 15
 

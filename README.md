@@ -28,6 +28,7 @@
  * terminator
  * helm
  * redis-cli
+ * jq
 
 ## Scripts and Shortcuts
 

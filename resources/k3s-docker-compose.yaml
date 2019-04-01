@@ -30,46 +30,7 @@ services:
     - /tmp/k3s/images:/var/lib/rancher/k3s/agent/images
     - /tmp/k3s/data:/data
     - disk1:/k3s/volumes/disk1
-    #- disk2:/k3s/volumes/disk2
-    #- disk3:/k3s/volumes/disk3
-    #- disk4:/k3s/volumes/disk4
-    #- disk5:/k3s/volumes/disk5
-    #- disk6:/k3s/volumes/disk6
-    #- disk7:/k3s/volumes/disk7
-    #- disk8:/k3s/volumes/disk8
-    #- disk9:/k3s/volumes/disk9
-    #- disk10:/k3s/volumes/disk10
-    #- disk11:/k3s/volumes/disk11
-    #- disk12:/k3s/volumes/disk12
-    #- disk13:/k3s/volumes/disk13
-    #- disk14:/k3s/volumes/disk14
-    #- disk15:/k3s/volumes/disk15
-    #- disk16:/k3s/volumes/disk16
-    #- disk17:/k3s/volumes/disk17
-    #- disk18:/k3s/volumes/disk18
-    #- disk19:/k3s/volumes/disk19
-    #- disk20:/k3s/volumes/disk20
 
 volumes:
   k3s-server: {}
-  # TODO: we need to fix issue with Nfs to have dynamic allocation with only one disk
   disk1: {}
-  #disk2: {}
-  #disk3: {}
-  #disk4: {}
-  #disk5: {}
-  #disk6: {}
-  #disk7: {}
-  #disk8: {}
-  #disk9: {}
-  #disk10: {}
-  #disk11: {}
-  #disk12: {}
-  #isk13: {}
-  #disk14: {}
-  #disk15: {}
-  #isk16: {}
-  #isk17: {}
-  #isk18: {}
-  #disk19: {}
-  #disk20: {}
