@@ -4,7 +4,8 @@ source ./bin/env.sh
 
 mkdir -p ~/bin
 mkdir -p $_WORKDIR
-rm -rf $_WORKDIR/*
+mkdir -p $_CONFIG
+#rm -rf $_WORKDIR/*
 
 cp -R ./resources $_WORKDIR/
 
@@ -37,7 +38,7 @@ if ! type "k3s" > /dev/null; then
 	echo "Installing k3s..."
 	wget https://github.com/rancher/k3s/releases/download/v0.2.0/k3s -O k3s
 	chmod +x k3s
-	sudo mv vault /usr/local/bin
+	sudo mv k3s /usr/local/bin
 fi
 
 # install k9s
@@ -56,7 +57,6 @@ if ! type "kubectl" > /dev/null; then
 	chmod +x ./kubectl
 	sudo mv ./kubectl /usr/local/bin/kubectl
 fi
-
 
 # intall vault
 if ! type "vault" > /dev/null; then
@@ -145,3 +145,11 @@ if ! type "redis-cli" > /dev/null; then
 	echo "Installing redis-cli..."
   sudo apt-get install redis-tools
 fi
+
+# intall asciinema
+#if ! type "asciinema" > /dev/null; then
+#	echo "Installing asciinema..."
+#	sudo apt-add-repository ppa:zanchey/asciinema
+#	sudo apt-get update
+#  sudo apt-get install asciinema
+#fi

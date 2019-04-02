@@ -7,7 +7,7 @@ echo "Waiting to stop all.."
 S_COUNT=$(kk_sts | grep -v NAME | wc -l)
 while [[ $(kk_sts | grep 0/0 -c) -ne $S_COUNT ]]; do
   echo '.'
-  sleep 5
+  sleep 3
 done
 
 kk scale deploy/nfs-provisioner --replicas=0

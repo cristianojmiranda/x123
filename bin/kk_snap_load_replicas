@@ -1,6 +1,6 @@
 #!/bin/bash
 source env.sh
-
-if [[ -e $_WORKDIR/rsnap ]]; then
-  cat $_WORKDIR/rsnap | awk '{printf "kk scale %s --replicas=%s\n",$1, $2}' | awk '{system($0)}'
+S_FILE=$_CONFIG/replicas
+if [[ -e $S_FILE ]]; then
+  cat $S_FILE | awk '{printf "kk scale %s --replicas=%s\n",$1, $2}' | awk '{system($0)}'
 fi

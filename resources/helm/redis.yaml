@@ -8,9 +8,9 @@ spec:
   chart: stable/redis-ha
   targetNamespace: default
   valuesContent: |-
-    #fullname: redis
+    fullnameOverride: redis
     image:
       tag: 5.0.4-alpine
-    #replicas: 5
+    replicas: 3
     persistentVolume:
       size: 100Mi

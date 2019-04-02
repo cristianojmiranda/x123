@@ -1,6 +1,7 @@
 #!/bin/bash
 
 _WORKDIR=~/.x123
+_CONFIG=~/.x123config
 _RESOURCES=$_WORKDIR/resources
 _HELM_RESOURCES=$_RESOURCES/helm
 

@@ -1,5 +1,6 @@
 #!/bin/bash
-kk get nodes -o wide
+echo "========================================================"
+kk get nodes -o wide | head -n 3
 echo
 kk cluster-info
 echo "========================================================"

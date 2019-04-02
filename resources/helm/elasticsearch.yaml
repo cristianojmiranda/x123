@@ -1,0 +1,20 @@
+# https://github.com/helm/charts/tree/master/stable/elasticsearch
+apiVersion: k3s.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: elasticsearch
+  namespace: kube-system
+spec:
+  chart: stable/elasticsearch
+  targetNamespace: default
+  valuesContent: |-
+    client:
+      heapSize: 128m
+    master:
+      heapSize: 128m
+      persistence:
+        size: 2Gi
+    data:
+      heapSize: 256m
+      persistence:
+        size: 2Gi

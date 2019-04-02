@@ -1,0 +1,3 @@
+#!/bin/bash
+STS=$(kk_sts |  grep $1 | shuf | head -n 1 | awk '{print $1}')
+kk describe sts $STS

@@ -1,0 +1,14 @@
+# https://github.com/helm/charts/tree/master/stable/filebeat
+apiVersion: k3s.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: filebeat
+  namespace: kube-system
+spec:
+  chart: stable/filebeat
+  targetNamespace: default
+  valuesContent: |-
+    config:
+      output:
+        file:
+          enabled: false

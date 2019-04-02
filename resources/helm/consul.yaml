@@ -12,4 +12,3 @@ spec:
     Replicas: 5
     Storage: 100Mi
     maxUnavailable: 3
-    #affinity: {}

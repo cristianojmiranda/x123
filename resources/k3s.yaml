@@ -1,1 +1,97 @@
 # inception of embedded k3s (why not? 'O.o')
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: k3s-server
+spec:
+  selector:
+    matchLabels:
+      app: k3s-server
+  serviceName: "k3s-server"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: k3s-server
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: k3s-server
+        image: rancher/k3s:v0.3.0
+        ports:
+        - containerPort: 6443
+          name: server
+        command:
+        - "/bin/sh"
+        args:
+        - "-c"
+        - "k3s server --disable-agent"
+        env:
+        - name: K3S_CLUSTER_SECRET
+          value: mykube
+        - name: K3S_KUBECONFIG_OUTPUT
+          value: /output/kubeconfig.yaml
+        - name: K3S_KUBECONFIG_MODE
+          value: '666'
+        volumeMounts:
+        - name: server-vol
+          mountPath: /var/lib/rancher/k3s
+  volumeClaimTemplates:
+  - metadata:
+      name: server-vol
+    spec:
+      accessModes: [ "ReadWriteMany" ]
+      resources:
+        requests:
+          storage: 1Gi
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: k3s-node
+spec:
+  selector:
+    matchLabels:
+      app: k3s-node
+  serviceName: "k3s-node"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: k3s-node
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: k3s-node
+        image: rancher/k3s:v0.3.0
+        env:
+        - name: K3S_CLUSTER_SECRET
+          value: mykube
+        - name: K3S_URL
+          value: https://k3s-server:6443
+        volumeMounts:
+        - name: node-vol
+          mountPath: /
+  volumeClaimTemplates:
+  - metadata:
+      name: node-vol
+    spec:
+      accessModes: [ "ReadWriteMany" ]
+      resources:
+        requests:
+          storage: 1Gi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: k3s
+  labels:
+    app: k3s-server
+spec:
+  ports:
+  - port: 6443
+    name: server
+  selector:
+    app: k3s-server

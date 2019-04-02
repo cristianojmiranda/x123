@@ -1,0 +1,12 @@
+# https://github.com/helm/charts/tree/master/stable/logstash
+apiVersion: k3s.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: logstash
+  namespace: kube-system
+spec:
+  chart: stable/logstash
+  targetNamespace: default
+  valuesContent: |-
+    persistence:
+      size: 1Gi

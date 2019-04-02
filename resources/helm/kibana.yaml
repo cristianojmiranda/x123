@@ -1,0 +1,19 @@
+# https://github.com/helm/charts/tree/master/stable/kibana
+apiVersion: k3s.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: kibana
+  namespace: kube-system
+spec:
+  chart: stable/kibana
+  targetNamespace: default
+  valuesContent: |-
+    persistentVolumeClaim:
+      size: 1Gi
+    env:
+      ELASTICSEARCH_URL: http://elasticsearch-client:9200
+    files:
+      kibana.yml:
+        server.name: kibana
+        server.host: "0"
+        elasticsearch.url: http://elasticsearch-client:9200

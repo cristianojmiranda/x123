@@ -1,0 +1,9 @@
+#!/bin/bash
+PORT=8500
+SERVICE=consul-ui
+
+if [[ $(kk_svs | grep -c consul-ui) -eq 0 ]]; then
+  SERVICE=consul
+fi
+
+svc_pf $SERVICE $PORT
