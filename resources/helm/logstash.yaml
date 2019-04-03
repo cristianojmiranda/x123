@@ -8,7 +8,34 @@ spec:
   chart: stable/logstash
   targetNamespace: default
   valuesContent: |-
-    #fullnameOverride: logstash
     persistence:
       size: 2Gi
       accessMode: ReadWriteMany
+
+    inputs:
+      main: |-
+        input {
+          beats {
+            port => 5044
+          }
+          http {
+           port => 8080
+          }
+        }
+
+    filters:
+      main: |-
+        filter {
+        }
+
+    outputs:
+      main: |-
+        output {
+          stdout { codec => rubydebug }
+          elasticsearch {
+            hosts => ["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]
+            manage_template => false
+            index => "%{[@metadata][beat]}-%{+YYYY.MM.dd}"
+            document_type => "%{[@metadata][type]}"
+          }
+        }

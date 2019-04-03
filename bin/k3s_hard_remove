@@ -1,0 +1,13 @@
+#!/bin/bash
+source confirm
+sudo service docker status
+
+echo "restarting docker service..."
+sudo service docker restart
+
+sleep 30
+sudo service docker status
+#ps -Af | grep containerd | grep k3s | awk '{print $2}' | xargs kill -9
+
+echo "removing cluster..."
+k3s_remove

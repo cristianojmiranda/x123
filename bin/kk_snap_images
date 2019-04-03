@@ -1,13 +1,15 @@
 #!/bin/bash
 source env.sh
 _FILE=$_CONFIG/images
+_TMP_FILE=/tmp/images
 
-kk get deploy -o json | jq -r '.items[] | .spec.template.spec.containers[] | .image' > $_FILE
-kk get sts -o json | jq -r '.items[] | .spec.template.spec.containers[] | .image' >> $_FILE
-kk get ds -o json | jq -r '.items[] | .spec.template.spec.containers[] | .image' >> $_FILE
+kk get deploy -o json | jq -r '.items[] | .spec.template.spec.containers[] | .image' > $_TMP_FILE
+kk get sts -o json | jq -r '.items[] | .spec.template.spec.containers[] | .image' >> $_TMP_FILE
+kk get ds -o json | jq -r '.items[] | .spec.template.spec.containers[] | .image' >> $_TMP_FILE
 
-kk -n kube-system get deploy -o json | jq -r '.items[] | .spec.template.spec.containers[] | .image' >> $_FILE
-kk -n kube-system get sts -o json | jq -r '.items[] | .spec.template.spec.containers[] | .image' >> $_FILE
-kk -n kube-system get ds -o json | jq -r '.items[] | .spec.template.spec.containers[] | .image' >> $_FILE
+kk -n kube-system get deploy -o json | jq -r '.items[] | .spec.template.spec.containers[] | .image' >> $_TMP_FILE
+kk -n kube-system get sts -o json | jq -r '.items[] | .spec.template.spec.containers[] | .image' >> $_TMP_FILE
+kk -n kube-system get ds -o json | jq -r '.items[] | .spec.template.spec.containers[] | .image' >> $_TMP_FILE
 
+cat $_TMP_FILE | sort | uniq > $_FILE
 cat $_FILE
