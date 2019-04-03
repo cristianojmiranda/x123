@@ -29,6 +29,7 @@ if [[ $(docker ps | grep k3s | grep server -c) -eq 0 ]]; then
 	echo "Replacing ~/.kube/config..."
 	mkdir -p ~/.kube
 	cat $_WORKDIR/kubeconfig.yaml  > ~/.kube/config
+	cat $_WORKDIR/kubeconfig.yaml  > ~/.kube/config_k3s
 	kk_info
 
   # prepare k3s-credential secret

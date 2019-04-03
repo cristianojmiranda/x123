@@ -16,8 +16,10 @@ spec:
       replicas: 2
       persistence:
         size: 2Gi
+        accessMode: ReadWriteMany
     data:
       heapSize: 256m
       replicas: 1
       persistence:
         size: 2Gi
+        accessMode: ReadWriteMany

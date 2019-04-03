@@ -1,5 +1,6 @@
 #!/bin/bash
 source env.sh
+source confirm
 
 k3s_stop
 docker-compose --file=$_K3S_DOCKER_COMPOSE rm -v

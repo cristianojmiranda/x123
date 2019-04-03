@@ -29,7 +29,7 @@ services:
     volumes:
     - /tmp/k3s/images:/var/lib/rancher/k3s/agent/images
     - /tmp/k3s/data:/data
-    - disk1:/k3s/volumes/disk1
+    - disk1:/k3s/volumes
 
 volumes:
   k3s-server: {}
