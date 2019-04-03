@@ -1,6 +1,16 @@
 #!/bin/bash
+kk_pv
+echo
+kk_pvc
+
+echo
 kk_info
-source confirm
+
+echo
+echo
+source confirm "Hey! You are pretty close to remove all pv's and pvc's. Do you want to continue?"
+source confirm "Are you sure? You gonna lost all HD's"
+source confirm "REALLY?"
 
 kk_pvc | grep -v NAME | awk '{print  $1}' | xargs kk delete pv
 kk_pv | grep -v NAME | awk '{print  $1}' | xargs kk delete pvc
