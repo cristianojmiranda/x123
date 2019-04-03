@@ -10,11 +10,14 @@ spec:
   valuesContent: |-
     client:
       heapSize: 128m
+      replicas: 1
     master:
       heapSize: 128m
+      replicas: 2
       persistence:
         size: 2Gi
     data:
       heapSize: 256m
+      replicas: 1
       persistence:
         size: 2Gi

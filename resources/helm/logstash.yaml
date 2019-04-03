@@ -8,5 +8,6 @@ spec:
   chart: stable/logstash
   targetNamespace: default
   valuesContent: |-
+    #fullnameOverride: logstash
     persistence:
       size: 1Gi

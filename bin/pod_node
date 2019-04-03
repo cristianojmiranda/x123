@@ -1,0 +1,5 @@
+#!/bin/bash
+POD=$(pod_ls $1 | shuf | head -n 1 | awk '{print $1}')
+echo "pod: $POD"
+NODE=$(kk get pod $POD -o json | jq -r .spec.nodeName)
+echo "node: $NODE"
