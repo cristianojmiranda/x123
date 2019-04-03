@@ -10,4 +10,4 @@ spec:
   valuesContent: |-
     #fullnameOverride: logstash
     persistence:
-      size: 1Gi
+      size: 2Gi

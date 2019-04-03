@@ -1,0 +1,4 @@
+#!/bin/bash
+kk_info
+echo "Pulling local images from cluster"
+kk_snap_images | xargs -I % docker pull %

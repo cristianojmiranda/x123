@@ -12,6 +12,9 @@ spec:
       output:
         file:
           enabled: false
+        logstash:
+          enabled: true
+          hosts: ["logstash:5044"]
     filebeat:
       prospectors:
         - type: log
@@ -30,10 +33,3 @@ spec:
                 when:
                   equals:
                     kubernetes.container.name: "filebeat"
-    output:
-      logstash:
-        hosts: ["logstash:5044"]
-    extraVolumes:
-      - name: varlog
-        hostPath:
-          path: /var/log

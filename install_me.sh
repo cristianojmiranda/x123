@@ -20,6 +20,12 @@ if ! type "jq" > /dev/null; then
 	sudo apt-get install jq
 fi
 
+# intall uuid
+if ! type "uuid" > /dev/null; then
+	echo "Installing uuid..."
+  sudo apt-get install uuid
+fi
+
 # intall curl
 if ! type "curl" > /dev/null; then
 	echo "Installing curl..."

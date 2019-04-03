@@ -1,5 +1,3 @@
 #!/bin/bash
-#kubectl set env --all deployment --list
-kk_info
 source confirm
 kk set env $1 --env="LAST_MANUAL_RESTART=$(date +%s)"

@@ -1,0 +1,4 @@
+#!/bin/bash
+POD=$(pod_get $1)
+echo "pod: $POD"
+kk get pod $POD -o json | jq -r '.spec.containers[] | .name'

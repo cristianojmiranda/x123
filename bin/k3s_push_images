@@ -1,0 +1,14 @@
+#!/bin/bash
+source env.sh
+_FILE=$_CONFIG/images
+
+# take a picture from pod images on cluster
+if [[ ! -e $_FILE ]]; then
+	kk_snap_images
+fi
+
+# pull images
+kk_pull_image
+
+# push to k3s image repo
+cat $_FILE | xargs -I %  docker save % -o $_K3S_IMAGES/$(uuid).tar

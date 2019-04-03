@@ -1,0 +1,13 @@
+#!/bin/bash
+source env.sh
+_FILE=$_CONFIG/images
+
+kk get deploy -o json | jq -r '.items[] | .spec.template.spec.containers[] | .image' > $_FILE
+kk get sts -o json | jq -r '.items[] | .spec.template.spec.containers[] | .image' >> $_FILE
+kk get ds -o json | jq -r '.items[] | .spec.template.spec.containers[] | .image' >> $_FILE
+
+kk -n kube-system get deploy -o json | jq -r '.items[] | .spec.template.spec.containers[] | .image' >> $_FILE
+kk -n kube-system get sts -o json | jq -r '.items[] | .spec.template.spec.containers[] | .image' >> $_FILE
+kk -n kube-system get ds -o json | jq -r '.items[] | .spec.template.spec.containers[] | .image' >> $_FILE
+
+cat $_FILE
