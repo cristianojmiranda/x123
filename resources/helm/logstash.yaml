@@ -1,4 +1,5 @@
 # https://github.com/helm/charts/tree/master/stable/logstash
+# https://www.elastic.co/guide/en/logstash/current/docker-config.html
 apiVersion: k3s.cattle.io/v1
 kind: HelmChart
 metadata:
@@ -8,9 +9,38 @@ spec:
   chart: stable/logstash
   targetNamespace: default
   valuesContent: |-
+    resources:
+      limits:
+        memory: 1Gi
+        cpu: 1
+      requests:
+        memory: 512Mi
+        cpu: 1
+
+    livenessProbe:
+      httpGet:
+        path: /
+        port: monitor
+      initialDelaySeconds: 180
+      periodSeconds: 30
+      timeoutSeconds: 30
+      failureThreshold: 6
+      successThreshold: 1
+
     persistence:
       size: 2Gi
       accessMode: ReadWriteMany
+
+    elasticsearch:
+      host: elasticsearch-client
+
+    config:
+      config.reload.automatic: "true"
+      log.level: "debug"
+      queue.drain: "false"
+      queue.max.bytes: "150mb"
+      queue.page.capacity: "1mb"
+      ls.java.opts: "-Xms512m -Xmx512m"
 
     inputs:
       main: |-

@@ -8,6 +8,13 @@ spec:
   chart: stable/filebeat
   targetNamespace: default
   valuesContent: |-
+    indexTemplateLoad:
+      - elasticsearch-client:9200
+    extraVars:
+      - name: ELASTICSEARCH_HOST
+        value: elasticsearch-client
+      - name: ELASTICSEARCH_PORT
+        value: "9200"
     config:
       output:
         file:
@@ -23,6 +30,7 @@ spec:
             - /var/log/*.log
             - /var/log/messages
             - /var/log/syslog
+            - /var/log/containers/*.log
         - type: docker
           containers.ids:
           - "*"
