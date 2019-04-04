@@ -1,0 +1,2 @@
+#!/bin/bash
+curl -sfL https://raw.githubusercontent.com/cristianojmiranda/x123/master/install.sh | sh -
