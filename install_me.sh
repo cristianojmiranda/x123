@@ -9,9 +9,13 @@ mkdir -p $_CONFIG
 
 cp -R ./resources $_WORKDIR/
 
+echo "Installing scripts into ~/bin..."
 chmod +x ./bin/*
 cp ./bin/* ~/bin
+echo_green "Done"
 
+
+source confirm "Do you want to install the softwares?"
 cd /tmp
 
 # intall jq
