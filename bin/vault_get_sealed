@@ -1,0 +1,7 @@
+#!/bin/bash
+SEALED=$(kk get vault secret -o json | jq -r ".status.vaultStatus.sealed")
+if [[ "$SEALED" == "null" ]]; then
+  echo "Not found"
+else
+  echo "$SEALED"| jq -r ".[]"
+fi

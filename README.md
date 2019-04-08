@@ -9,8 +9,11 @@
  ```
 
  > New softwares will be installed in you machine and will be created new shortcuts at `~/bin`.<br />
+
  > Before intall this make sure that your don't have any conflict of files in `~/bin` with this repo at the risk to be overwritten.<br />
+
  > The shortcuts could be harmful for you production cluster, use it by your own risk.<br />
+
  > I recommend you to explore your `~/bin` folder after install or just check `bin` folder on this repo. The documentation could be behind of available shortcuts.<br />
 
  It'll installed the following softwares if you don't have it:
@@ -102,6 +105,19 @@
   helm_install dashboard
   ```
   | To access the dashboard just run `./pf_dashboard` and access http://localhost:8443, and skip the login
+
+## Vaul
+
+### Installing vault operator
+
+```
+helm_install vault-operator
+```
+
+### Unsealing vault servers
+```
+vault_unseal
+```
 
 ## References
  * [k3s](https://k3s.io/)

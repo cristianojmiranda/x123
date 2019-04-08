@@ -1,0 +1,86 @@
+#!/bin/bash
+if [[ $(kk get vault | grep -wc secret) -eq 0 ]]; then
+  echo_red "Not found any vault secret(kk get vault)"
+  echo_yellow "If you wanna deploy it: helm_install vault-operator"
+
+else
+
+  #cat <<EOF | kk apply -f -
+  #apiVersion: "vault.security.coreos.com/v1alpha1"
+  #kind: "VaultService"
+  #metadata:
+  # name: "secret"
+  #  namespace: default
+  #spec:
+  #  nodes: 3
+  #  version: "0.9.1-0"
+  #EOF
+
+  # kk delete vault secret
+
+  # setup vault access
+  export VAULT_ADDR='https://localhost:8200'
+  export VAULT_SKIP_VERIFY="true"
+
+  echo
+  echo "Waiting to vault be ready.."
+  while [[ $(kk_pods | grep -v etcd | grep -c secret) -lt 3 ]]; do
+    echo "."
+    sleep 3
+  done
+
+  if [[ -e /tmp/vault-seal ]]; then
+    echo
+    echo "Server already initialized"
+
+  else
+
+    if [[ $(kk get secrets | grep -wc vault-seal) -eq 1 ]]; then
+      kk get secrets vault-seal -o json | jq -r '.data["vault-seal"]' | base64 -d > /tmp/vault-seal
+    else
+
+      # stop all pf's
+      ps -Af | grep port-forward | grep 8200 | awk '{print $2}' | xargs kill -9
+
+      # get the sealed guys
+      kk get vault secret -o jsonpath='{.status.vaultStatus.sealed[0]}' | xargs -0 -I {} kubectl port-forward {} 8200 > /dev/null &
+      sleep 5
+
+      # init the server
+      #vault init > /tmp/vault-seal
+      vault operator init > /tmp/vault-seal
+    fi
+  fi
+
+  # get the seals
+  cat /tmp/vault-seal | grep 'Unseal Key' | awk '{print $4}' | shuf | head -n 3 > /tmp/seals
+
+  # unseal the servers
+  if [[ $(vault_get_sealed | grep "Not found" -c) -eq 0 ]]; then
+    echo
+    echo_yellow "Let's unseal the servers"
+    for server in $(vault_get_sealed); do
+      echo "Unsealing $server..."
+      ps -Af | grep port-forward | grep 8200 | awk '{print $2}' | xargs kill -9
+      kk port-forward $server 8200 > /dev/null &
+      sleep 5
+      cat /tmp/seals | xargs -I % vault unseal %
+    done
+  else
+    echo
+    echo_green "All servers already unsealed! \o/"
+  fi
+
+  ps -Af | grep port-forward | grep 8200 | awk '{print $2}' | xargs kill -9
+
+  if [[ $(kk get secrets | grep -wc vault-seal) -eq 0 ]]; then
+    echo
+    echo "Creating the vault-seal secret..."
+    #kk delete secret vault-seal
+    kubectl create secret generic vault-seal --from-file=/tmp/vault-seal
+    rm -f /tmp/vault-seal
+  fi
+
+  echo_green "We done."
+
+fi

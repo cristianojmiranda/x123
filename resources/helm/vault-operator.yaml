@@ -1,4 +1,5 @@
 # https://github.com/helm/charts/tree/master/stable/vault-operator
+# https://github.com/coreos/vault-operator
 apiVersion: k3s.cattle.io/v1
 kind: HelmChart
 metadata:
@@ -11,15 +12,18 @@ spec:
     etcd-operator:
       enabled: true
 
----
+--
 apiVersion: "vault.security.coreos.com/v1alpha1"
 kind: "VaultService"
 metadata:
   name: "secret"
   namespace: default
 spec:
-  nodes: 2
+  nodes: 3
   version: "0.9.1-0"
+
+#export VAULT_ADDR='https://localhost:8200'
+#export VAULT_SKIP_VERIFY="true"
 
 #kubectl get vault secret -o jsonpath='{.status.vaultStatus.sealed[0]}' | xargs -0 -I {} kubectl port-forward {} 8200
 #vault init

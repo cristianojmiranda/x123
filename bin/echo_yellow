@@ -1,0 +1,3 @@
+#!/bin/bash
+source env.sh
+echo -e "${F_YELLOW}$1${RESET}"
