@@ -1,10 +1,15 @@
 #!/bin/bash
-kk_info
+source kk_info
 POD=$(pod_get $1)
-echo "pod=$POD"
 
-if [[ $# -gt 1 ]]; then
-  kk exec -it $POD ${@:2}
+if [[ "$POD" == "" ]]; then
+  echo -e "${F_RED}Pod not found${RESET}"
 else
-  kk exec -it $POD sh
+  echo -e "${F_YELLOW}pod: ${BOLD}$POD${RESET}"
+
+  if [[ $# -eq 1 ]]; then
+    kk exec -it $POD sh
+  else
+    kk exec -it $POD ${@:2}
+  fi
 fi

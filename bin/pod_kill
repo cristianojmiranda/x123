@@ -1,0 +1,7 @@
+#!/bin/bash
+source kk_info
+POD=$(pod_get $1)
+echo -e "${F_YELLOW}pod: ${BOLD}$POD${RESET}"
+
+source confirm "${F_LIGHT_RED}Are you sure? You are close to kill all processes of the pod ${BOLD}${POD}${RESET}"
+kk exec -it $POD -- ls /proc/ | grep -Eo '[0-9]{1,4}' | awk '{printf "kill %s\n", $1}' | xargs -I % kk exec $POD %

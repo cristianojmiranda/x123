@@ -1,18 +1,22 @@
 #!/bin/bash
+source env.sh
+
 if [[ $# -eq 1 ]] ; then
-	read -p "$1 [y/n] " answer
+	echo -e "$1 [y/n]"
+	read -p "# " answer
 else
-	read -p "Are you sure? [y/n] " answer
+	echo -e "${F_YELLOW}Are you sure? [y/n]${RESET}"
+	read -p "# " answer
 fi
 
 case "${answer}" in
 	[yY]|[yY][eE][sS])
-        echo
-	    echo "Let's proceed \o/"
+      	echo
+	    	echo -e "${F_GREEN}Let's proceed \o/${RESET}"
         ;;
     *)
         echo
-		echo 'Ok, we stay here ;)'
-		exit -1
+				echo -e "${F_RED}Ok, we stay here ;)${RESET}"
+				exit -1
         ;;
 esac

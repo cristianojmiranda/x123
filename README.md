@@ -80,6 +80,29 @@
  * **gitacopucu** - git add -A, commit and push at the current branch
  * **gits** - `git status`
 
+## k3s
+
+  Start
+  ```
+  k3s_start
+  ```
+
+  Stop
+  ```
+  k3s_stop
+  ```
+
+  Remove containers and volumes, erase completely the cluster
+  ```
+  k3s_remove
+  ```
+
+  Deploy dashboard
+  ```
+  helm_install dashboard
+  ```
+  | To access the dashboard just run `./pf_dashboard` and access http://localhost:8443, and skip the login
+
 ## References
  * [k3s](https://k3s.io/)
  * [consul](https://www.consul.io/)
@@ -97,3 +120,5 @@
  * [make a graph](https://graphs.grevian.org/graph)
  * [helm](https://helm.sh/)
  * [helmChart's](https://github.com/helm/charts/tree/master/stable)
+ * [bash color](https://misc.flogisoft.com/bash/tip_colors_and_formatting)
+ * [kubernetes cheat sheet](https://linuxacademy.com/blog/containers/kubernetes-cheat-sheet/)

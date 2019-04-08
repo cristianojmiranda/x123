@@ -1,0 +1,6 @@
+#!/bin/bash
+source confirm
+helm_install elasticsearch
+helm_install logstash
+helm_install filebeat
+helm_install kibana

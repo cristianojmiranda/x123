@@ -1,6 +1,6 @@
 #!/bin/bash
 kk_info
 POD=$(pod_get_run $1)
-echo "pod=$POD"
+echo "pod: $POD"
 
 kk port-forward $POD $2

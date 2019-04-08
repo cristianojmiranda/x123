@@ -1,13 +1,22 @@
 #!/bin/bash
-kk_snap_replicas > /dev/null
-kk get sts -o json | jq -r '.items[] | "kk scale sts/\(.metadata.name) --replicas=0"' | awk '{system($0)}'
-kk get deploy -o json | jq -r '.items[] | "kk scale deploy/\(.metadata.name) --replicas=0"' | grep -v nfs-provisioner | awk '{system($0)}'
+if [[ $(kk_nodes | grep Ready -c) -eq 0 ]]; then
+  echo "Not found any node running"
+else
 
-echo "Waiting to stop all.."
-S_COUNT=$(kk_sts | grep -v NAME | wc -l)
-while [[ $(kk_sts | grep 0/0 -c) -ne $S_COUNT ]]; do
-  echo '.'
-  sleep 3
-done
+  kk_snap_replicas > /dev/null
+  kk get sts -o json | jq -r '.items[] | "kk scale sts/\(.metadata.name) --replicas=0"' | awk '{system($0)}'
+  kk get deploy -o json | jq -r '.items[] | "kk scale deploy/\(.metadata.name) --replicas=0"' | grep -v nfs-provisioner | awk '{system($0)}'
 
-kk scale deploy/nfs-provisioner --replicas=0
+  echo "Waiting to stop all.."
+  S_COUNT=$(kk_sts | grep -v NAME | wc -l)
+  while [[ $(kk_sts | grep 0/0 -c) -ne $S_COUNT ]]; do
+    echo '.'
+    sleep 3
+  done
+
+  if [[ $(kk_dp | grep -c nfs-provisioner) -eq 1 ]] ; then
+    kk scale deploy/nfs-provisioner --replicas=0
+    sleep 15
+  fi
+
+fi

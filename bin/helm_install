@@ -12,7 +12,9 @@ if [[ ! -e $_HELM_RESOURCES/$1.yaml ]]; then
 	exit 1
 fi
 
+echo -e "${F_DARK_GRAY}"
 cat $_HELM_RESOURCES/$1.yaml
-source confirm
+echo -e "${RESET}"
+source confirm "Ok?"
 
 cp $_HELM_RESOURCES/$1.yaml $_K3S_MANIFESTS/$1.yaml

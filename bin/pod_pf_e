@@ -1,6 +1,6 @@
 #!/bin/bash
 kke $1 cluster-info
 POD=$(pod_get_run_e $1 $2)
-echo "pod=$POD"
+echo "pod: $POD"
 
 kke $1 port-forward $POD $3

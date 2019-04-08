@@ -1,3 +1,4 @@
 #!/bin/bash
-echo "ns=kube-system"
+source env.sh
+echo -e "ns: ${BOLD}kube-system${RESET}"
 kkn kube-system $@
