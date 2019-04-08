@@ -5,3 +5,7 @@ if [[ "$SEALED" == "null" ]]; then
 else
   echo "$SEALED"| jq -r ".[]"
 fi
+
+
+# kk get vault secret -o jsonpath='{.status.vaultStatus.standby}'
+# kk get vault secret -o jsonpath='{.status.vaultStatus}'

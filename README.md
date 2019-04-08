@@ -106,7 +106,7 @@
   ```
   | To access the dashboard just run `./pf_dashboard` and access http://localhost:8443, and skip the login
 
-## Vaul
+## Vault
 
 ### Installing vault operator
 
