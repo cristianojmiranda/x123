@@ -1,0 +1,23 @@
+#!/bin/bash
+source env.sh
+
+SLEEP=3
+STEPS=100
+COMMAND="date"
+
+if [[ $# -eq 1 ]]; then
+  COMMAND=$1
+elif [[ $# -eq 2 ]]; then
+  COMMAND=$1
+  STEPS=$2
+elif [[ $# -eq 3 ]]; then
+  COMMAND=$1
+  STEPS=$2
+  SLEEP=$3
+fi
+
+for i in $(seq $STEPS); do
+  bash -c "${COMMAND}";
+  echo "";
+  sleep $SLEEP;
+done

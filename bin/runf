@@ -1,9 +1,0 @@
-#!/bin/bash
-SLEEP=3
-STEPS=100
-
-for i in $(seq $STEPS); do
-  all_pods | grep logst;
-  sleep $SLEEP;
-  echo;
-done
