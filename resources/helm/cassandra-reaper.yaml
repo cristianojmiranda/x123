@@ -1,0 +1,14 @@
+# https://github.com/helm/charts/tree/master/incubator/cassandra-reaper
+apiVersion: k3s.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: cassandra-reaper
+  namespace: kube-system
+spec:
+  chart: cassandra-reaper
+  repo: https://kubernetes-charts-incubator.storage.googleapis.com/
+  targetNamespace: default
+  valuesContent: |-
+    env:
+      - name: REAPER_CASS_CONTACT_POINTS
+        value: "[ \"cassandra\", \"cassandra-svc\", ]"

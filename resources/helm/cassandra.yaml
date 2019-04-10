@@ -1,0 +1,65 @@
+# https://github.com/helm/charts/tree/master/incubator/cassandra
+apiVersion: k3s.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: cassandra
+  namespace: kube-system
+spec:
+  chart: cassandra
+  repo: https://kubernetes-charts-incubator.storage.googleapis.com/
+  targetNamespace: default
+  valuesContent: |-
+    config:
+      max_heap_size: 768M
+      heap_new_size: 128M
+      seed_size: 1
+      num_tokens: 16
+      cluster_size: 1
+      dc_name: DC_1
+      rack_name: RACK_1
+    persistence:
+      size: 3Gi
+    resources:
+      requests:
+        memory: 1Gi
+        cpu: 1
+      limits:
+        memory: 1Gi
+        cpu: 1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: cassandra
+    chart: cassandra-0.11.0
+    heritage: Tiller
+    release: cassandra
+  name: cassandra-svc
+  namespace: default
+spec:
+  type: ClusterIP
+  ports:
+  - name: intra
+    port: 7000
+    protocol: TCP
+    targetPort: 7000
+  - name: tls
+    port: 7001
+    protocol: TCP
+    targetPort: 7001
+  - name: jmx
+    port: 7199
+    protocol: TCP
+    targetPort: 7199
+  - name: cql
+    port: 9042
+    protocol: TCP
+    targetPort: 9042
+  - name: thrift
+    port: 9160
+    protocol: TCP
+    targetPort: 9160
+  selector:
+    app: cassandra
+    release: cassandra
