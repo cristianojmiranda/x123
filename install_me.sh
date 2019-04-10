@@ -17,6 +17,7 @@ echo_green "Done"
 
 echo
 echo
+sleep 1
 source confirm "Do you want to install the softwares?"
 cd /tmp
 
