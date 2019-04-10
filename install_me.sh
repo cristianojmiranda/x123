@@ -15,6 +15,8 @@ cp ./bin/* ~/bin
 echo_green "Done"
 
 
+echo
+echo
 source confirm "Do you want to install the softwares?"
 cd /tmp
 
