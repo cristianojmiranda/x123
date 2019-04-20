@@ -1,0 +1,81 @@
+version: '3'
+services:
+
+  rqlite:
+    image: rqlite/rqlite
+    ports:
+      - 4001:4001
+      - 4002:4002
+
+  rabbitmq:
+    image: rabbitmq:3.7.8-management-alpine
+    ports:
+      - 15672:15672
+
+  templar:
+    image: templar
+    command: >
+      sh -c "
+        while ! nc -z rqlite 4001; do
+          echo .;
+          sleep 1;
+        done;
+        echo xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx;
+        python3 /app/server.py;"
+    environment:
+      - APP_WORKERS=2
+      - RQLITE_SERVER=rqlite
+      - PYTHONUNBUFFERED=1
+    ports:
+      - 8001:8000
+    depends_on:
+      - rqlite
+
+  island:
+    image: island
+    command: >
+      sh -c "
+        while ! nc -z templar 8000; do
+          echo .;
+          sleep 1;
+        done;
+        while ! nc -z rabbitmq 5672; do
+          echo *;
+          sleep 1;
+        done;
+        echo xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx;
+        python3 /app/server.py;"
+    environment:
+      - APP_WORKERS=2
+      - RQLITE_SERVER=rqlite
+      - MQ_HOST=rabbitmq
+      - TEMPLAR_URL=http://templar:8000
+      - PYTHONUNBUFFERED=1
+    ports:
+      - 8000:8000
+    depends_on:
+      - rqlite
+      - templar
+      - rabbitmq
+
+  octopus:
+    image: octopus
+    command: >
+      sh -c "
+        while ! nc -z island 8000; do
+          echo .;
+          sleep 1;
+        done;
+        while ! nc -z rabbitmq 5672; do
+          echo *;
+          sleep 1;
+        done;
+        echo xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx;
+        python3 /app/mqp.py;"
+    environment:
+      - MQ_HOST=rabbitmq
+      - ISLAND_URL=http://island:8000
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - island
+      - rabbitmq

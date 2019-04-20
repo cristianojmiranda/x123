@@ -1,0 +1,27 @@
+version: '3'
+services:
+
+  rqlite:
+    image: rqlite/rqlite
+    ports:
+      - 4001:4001
+      - 4002:4002
+
+  templar:
+    image: templar
+    command: >
+      sh -c "
+        while ! nc -z rqlite 4001; do
+          echo .;
+          sleep 1;
+        done;
+        echo xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx;
+        python3 /app/server.py;"
+    environment:
+      - APP_WORKERS=4
+      - RQLITE_SERVER=rqlite
+      - PYTHONUNBUFFERED=1
+    ports:
+      - 8000:8000
+    depends_on:
+      - rqlite

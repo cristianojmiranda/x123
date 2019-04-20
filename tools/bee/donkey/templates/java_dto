@@ -1,0 +1,19 @@
+{{#templar header this }}{{/templar}}
+package {{package}}
+
+import lombok.Data;
+
+{{#each imports}}
+{{this}}
+{{/each}}
+
+@Data
+/* {{description}} */
+public class {{className}} {
+
+  {{#each fields }}
+  // {{description}}
+  private {{type}} {{name}};
+  {{/each}}
+
+}
