@@ -1,0 +1,14 @@
+# https://github.com/helm/charts/tree/master/stable/postgresql
+apiVersion: k3s.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: postgresql
+  namespace: kube-system
+spec:
+  chart: stable/postgresql
+  targetNamespace: default
+  valuesContent: |-
+    persistence:
+      size: 3Gi
+    #postgresqlUsername: admin
+    #postgresqlPassword: admin

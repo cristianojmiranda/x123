@@ -9,6 +9,5 @@ spec:
   repo: https://kubernetes-charts-incubator.storage.googleapis.com/
   targetNamespace: default
   valuesContent: |-
-    env:
-      - name: REAPER_CASS_CONTACT_POINTS
-        value: "[ \"cassandra\", \"cassandra-svc\", ]"
+    datacenterAvailability: local
+    loggingRootLevel: debug

@@ -159,6 +159,17 @@ if ! type "redis-cli" > /dev/null; then
   sudo apt-get install redis-tools
 fi
 
+# intall rqlited
+if ! type "rqlited" > /dev/null; then
+	curl -L https://github.com/rqlite/rqlite/releases/download/v4.4.0/rqlite-v4.4.0-linux-amd64.tar.gz -o rqlite-v4.4.0-linux-amd64.tar.gz
+	tar xvfz rqlite-v4.4.0-linux-amd64.tar.gz
+	#cd rqlite-v4.4.0-linux-amd64
+	sudo mv rqlite-v4.4.0-linux-amd64/rqlited /usr/local/bin/rqlited
+	sudo mv rqlite-v4.4.0-linux-amd64/rqlite /usr/local/bin/rqlite
+	rm -f *.tar.gz
+	rm -rf rqlite-*
+fi
+
 # intall asciinema
 #if ! type "asciinema" > /dev/null; then
 #	echo "Installing asciinema..."

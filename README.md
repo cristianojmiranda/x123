@@ -138,3 +138,7 @@ vault_unseal
  * [helmChart's](https://github.com/helm/charts/tree/master/stable)
  * [bash color](https://misc.flogisoft.com/bash/tip_colors_and_formatting)
  * [kubernetes cheat sheet](https://linuxacademy.com/blog/containers/kubernetes-cheat-sheet/)
+ * [lixa](https://github.com/tiian/lixa)
+ * [swagger-editor](https://editor.swagger.io/)
+ * [swagger-py-codegen](https://github.com/guokr/swagger-py-codegen)
+ * [sqlite-utils](https://github.com/simonw/sqlite-utils)
