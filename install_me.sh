@@ -47,12 +47,12 @@ if ! type "zsh" > /dev/null; then
 fi
 
 # intall k3s
-if ! type "k3s" > /dev/null; then
-	echo "Installing k3s..."
-	wget https://github.com/rancher/k3s/releases/download/v0.2.0/k3s -O k3s
-	chmod +x k3s
-	sudo mv k3s /usr/local/bin
-fi
+#if ! type "k3s" > /dev/null; then
+#	echo "Installing k3s..."
+#	wget https://github.com/rancher/k3s/releases/download/v0.2.0/k3s -O k3s
+#	chmod +x k3s
+#	sudo mv k3s /usr/local/bin
+#fi
 
 # install k9s
 if ! type "k9s" > /dev/null; then
@@ -94,34 +94,34 @@ echo "Fetching Consul..."
 fi
 
 # install python3.7
-if ! type "python3.7" > /dev/null; then
-	echo "Installing python3.7..."
-	sudo apt-get install build-essential checkinstall
-	sudo apt-get install libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
+#if ! type "python3.7" > /dev/null; then
+#	echo "Installing python3.7..."
+#	sudo apt-get install build-essential checkinstall
+#	sudo apt-get install libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
 
-	cd /usr/src
-	sudo wget https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tgz
-	sudo tar xzf Python-3.7.2.tgz
+#	cd /usr/src
+#	sudo wget https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tgz
+#	sudo tar xzf Python-3.7.2.tgz
 
-	cd Python-3.7.2
-	sudo ./configure --enable-optimizations
-	sudo make altinstall
+#	cd Python-3.7.2
+#	sudo ./configure --enable-optimizations
+#	sudo make altinstall
 
 	#alias python=python3.7
 	#sudo ln -sf /usr/local/bin/python3.7 /usr/bin/python3
-fi
+#fi
 
 # intall telepresence
-if ! type "telepresence" > /dev/null; then
-	echo "Install telepresence..."
-	curl -s https://packagecloud.io/install/repositories/datawireio/telepresence/script.deb.sh | sudo bash
-	sudo apt install --no-install-recommends telepresence
+#if ! type "telepresence" > /dev/null; then
+#	echo "Install telepresence..."
+#	curl -s https://packagecloud.io/install/repositories/datawireio/telepresence/script.deb.sh | sudo bash
+#	sudo apt install --no-install-recommends telepresence
 
 	#curl -sO https://packagecloud.io/install/repositories/datawireio/telepresence/script.deb.sh
 	#sudo env os=ubuntu dist=xenial bash script.deb.sh
 	#sudo apt install --no-install-recommends telepresence
 	#rm script.deb.sh
-fi
+#fi
 
 # intall atom
 if ! type "atom" > /dev/null; then
@@ -145,17 +145,17 @@ if ! type "dot" > /dev/null; then
 fi
 
 # intall helm
-if ! type "helm" > /dev/null; then
-	echo "Installing helm..."
-	wget https://storage.googleapis.com/kubernetes-helm/helm-v2.13.1-linux-amd64.tar.gz -O helm.tar.gz
-	tar -xvzf helm.tar.gz
-	sudo mv linux-amd64/helm /usr/local/bin/helm
-	helm -h
-fi
+#if ! type "helm" > /dev/null; then
+#	echo "Installing helm..."
+#	wget https://storage.googleapis.com/kubernetes-helm/helm-v2.13.1-linux-amd64.tar.gz -O helm.tar.gz
+#	tar -xvzf helm.tar.gz
+#	sudo mv linux-amd64/helm /usr/local/bin/helm
+#	helm -h
+#fi
 
 # intall redis-cli
 if ! type "redis-cli" > /dev/null; then
-	echo "Installing redis-cli..."
+  echo "Installing redis-cli..."
   sudo apt-get install redis-tools
 fi
 
