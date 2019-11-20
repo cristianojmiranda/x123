@@ -1,0 +1,31 @@
+#!/bin/bash
+if [[ $# -ne 1 ]]; then
+	echo "You must specify the new swap file size. Like: swap_resize 8"
+	exit 1
+fi
+
+ls -lAh /swapfile
+source confirm "Are you sure?"
+
+NEW_SIZE="$((1024*$1))"
+echo "Resizing /swapfile to $NEW_SIZE"
+
+free -h
+sudo swapon --show
+
+source confirm "Do you really want to remove /swapfile?"
+
+echo "Turning off swap process..."
+sudo swapoff /swapfile
+sudo rm  /swapfile
+
+echo "Resing /swapfile..."
+sudo dd if=/dev/zero of=/swapfile bs=1M count=$1
+
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+
+echo "Turning ON swap process..."
+sudo swapon /swapfile
+
+echo_green "Done!"
