@@ -20,7 +20,7 @@ sudo swapoff /swapfile
 sudo rm  /swapfile
 
 echo "Resing /swapfile..."
-sudo dd if=/dev/zero of=/swapfile bs=1M count=$1
+sudo dd if=/dev/zero of=/swapfile bs=1M count=$NEW_SIZE
 
 sudo chmod 600 /swapfile
 sudo mkswap /swapfile
@@ -28,4 +28,5 @@ sudo mkswap /swapfile
 echo "Turning ON swap process..."
 sudo swapon /swapfile
 
+sudo swapon --show
 echo_green "Done!"
